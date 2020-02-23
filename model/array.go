@@ -11,13 +11,25 @@ func TwoSum(numbers []int, target int) []int {
 	rs := make([]int, 2)
 	for i := 0; i < len(numbers); i++ {
 		for j := i + 1; j < len(numbers); j++ {
-			temp := numbers[i] + numbers[j]
-			if temp == target {
-				rs[0] = i
-				rs[1] = j
-				break
+			if numbers[i]+numbers[j] == target {
+				return []int{i, j}
 			}
 		}
 	}
 	return rs
+}
+
+// 哈希方式解决两数之和
+func TwoSumHash(numbers []int, target int) []int {
+	data := make(map[int]int, len(numbers))
+
+	for k, v := range numbers {
+		sub := target - v
+		if j, ok := data[sub]; ok {
+			return []int{j, k}
+		} else {
+			data[v] = k
+		}
+	}
+	return nil
 }
