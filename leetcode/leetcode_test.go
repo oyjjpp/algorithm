@@ -98,17 +98,32 @@ func TestLengthOfLongestSubstring(t *testing.T) {
 }
 
 func TestFindMedianSortedArrays(t *testing.T) {
-	num1 := []int{1, 3}
 	num2 := []int{2}
-	rs := findMedianSortedArrays(num1, num2)
+	num1 := []int{1, 3}
+	rs := findMedianSortedArraysV2(num1, num2)
 	if rs != 2 {
 		t.Errorf("expect %f, result %f\n", 2.0, rs)
 	}
 
 	num1 = []int{1, 2}
 	num2 = []int{3, 4}
-	rs = findMedianSortedArrays(num1, num2)
+	rs = findMedianSortedArraysV2(num1, num2)
 	if rs != 2.5 {
 		t.Errorf("expect %f, result %f\n", 2.5, rs)
+	}
+}
+
+func TestLongestPalindrome(t *testing.T) {
+	param := map[string]string{
+		"babab": "babab",
+		"babad": "bab",
+		"cbbd":  "bb",
+	}
+
+	for k, v := range param {
+		rs := longestPalindromeV2(k)
+		if rs != v {
+			t.Errorf("expect %s, result %s\n", v, rs)
+		}
 	}
 }
