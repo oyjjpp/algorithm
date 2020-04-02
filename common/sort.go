@@ -1,6 +1,8 @@
 // 常见排序算法
 package common
 
+// 二路归并
+
 //@link 排序算法 https://juejin.im/post/5a08cc646fb9a045030f9174
 
 /**
@@ -11,13 +13,10 @@ package common
  * 稳定性：稳定
  */
 func InsertSort(item []int) []int {
-	var temp int
-	var j int
-
 	for i := 1; i < len(item); i++ {
-		//保存第一个值
-		temp = item[i]
-		j = i - 1
+		// 选取一个值 向有序集合中插入
+		temp := item[i]
+		j := i - 1
 
 		for ; j >= 0 && item[j] > temp; j-- {
 			item[j+1] = item[j]
@@ -198,6 +197,30 @@ func quickSort(item []int, start, end int) {
 		quickSort(item, start, left-1)
 		quickSort(item, left+1, end)
 	}
+}
+
+// QuertSortV2
+// 快速排序 递归 取一个值作为基准,大于基数的放在左边，小于基于的放在右边
+func QuertSortV2(data []int) []int {
+	if len(data) < 1 {
+		return data
+	}
+	// 获取第一个为基数
+	temp := data[0]
+
+	left := []int{}
+	right := []int{}
+	for i := 1; i < len(data); i++ {
+		if data[i] > temp {
+			right = append(right, data[i])
+		} else {
+			left = append(left, data[i])
+		}
+	}
+	left = QuertSortV2(left)
+	right = QuertSortV2(right)
+
+	return append(append(left, temp), right...)
 }
 
 /**
