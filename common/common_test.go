@@ -10,7 +10,7 @@ func TestBubbleSort(t *testing.T) {
 
 func TestSort(t *testing.T) {
 	data := []int{5, 2, 0, 1, 3, 1, 4}
-	rs := QuertSortV2(data)
+	rs := MergeSort(data)
 	t.Log(rs)
 }
 

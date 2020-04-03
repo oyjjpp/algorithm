@@ -234,52 +234,62 @@ func MergeSort(item []int) []int {
 	return item
 }
 
+// @param item 排序数组
+// @param 开始索引位置
+// @param 结束索引位置
 func mergeSort(item []int, left, right int) {
 	if left < right {
 		center := (left + right) / 2
 		mergeSort(item, left, center)
 		mergeSort(item, center+1, right)
-		merge(item, left, center, right)
+		merge(item, left, center+1, right)
 	}
 }
 
+// @desc 合并两个数组
+// @link https://juejin.im/post/5ab4c7566fb9a028cb2d9126
 func merge(item []int, left, center, right int) {
-	var tempItem []int
+	// 左侧数组大小
+	leftData := make([]int, center-left)
+	// 右侧数组大小
+	rightData := make([]int, right-center+1)
 
-	mid := center + 1
+	// 向两个数组中填充数据
+	for i := left; i < center; i++ {
+		leftData[i-left] = item[i]
+	}
 
-	//记录中间数组的索引
-	third := left
+	for i := center; i <= right; i++ {
+		rightData[i-center] = item[i]
+	}
 
-	//复制是用到的索引
-	temp := left
-
-	for left <= center && mid <= right {
-		if item[left] <= item[mid] {
-			third++
-			left++
-			tempItem[third] = item[left]
+	// 用于遍历两个数组
+	i, j := 0, 0
+	// 数组中的第一个元素
+	index := left
+	// 循环对比合并两个数组
+	for i < len(leftData) && j < len(rightData) {
+		if leftData[i] < rightData[j] {
+			item[index] = leftData[i]
+			i++
 		} else {
-			third++
-			mid++
-			tempItem[third] = item[mid]
+			item[index] = rightData[j]
+			j++
 		}
+		// 增加后索引增加1
+		index++
 	}
 
-	for mid <= right {
-		third++
-		mid++
-		tempItem[third] = item[mid]
+	// 将数据中剩余的元素继续插入
+	for i < len(leftData) {
+		item[index] = leftData[i]
+		i++
+		index++
 	}
-
-	for left <= center {
-		third++
-		left++
-		tempItem[third] = item[left]
-	}
-
-	for temp <= right {
-		item[temp] = tempItem[temp]
+	for j < len(rightData) {
+		item[index] = rightData[j]
+		j++
+		index++
 	}
 }
 
