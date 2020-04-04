@@ -1,7 +1,10 @@
 // 数据 & 位运算
 package common
 
-import "strconv"
+import (
+	"strconv"
+	"strings"
+)
 
 // singleNumber
 // 只出现一次的数字
@@ -16,6 +19,7 @@ func singleNumber(nums []int) int {
 }
 
 // maxPoints
+// TODO
 // 直线上最多的点数
 // 给定一个二维平面，平面上有 n 个点，求最多有多少个点在同一条直线上
 func maxPoints(points [][]int) int {
@@ -150,4 +154,79 @@ func hammingWeight(num uint32) int {
 		num = (num >> 1)
 	}
 	return res
+}
+
+// 计数质数
+// countPrimes[厄拉多塞筛法]
+// 统计所有小于非负整数n的质数的数量
+func countPrimes(n int) int {
+	count := 0
+	// 用来记录“已经找过的数的倍数”的
+	signs := make([]bool, n)
+	for i := 2; i < n; i++ {
+		if signs[i] {
+			continue
+		}
+		count++
+		// 计算当前数据的倍数 都不可能为质数
+		for j := 2 * i; j < n; j += i {
+			signs[j] = true
+		}
+	}
+	return count
+}
+
+// isPrime
+// 是否为质数
+func isPrime(value int) bool {
+
+	// 校验1/2/3等情况 1就不是质数也不是合数 2/3为质数
+	if value <= 3 {
+		return value >= 2
+	}
+
+	// 能够整除2/3都不是质数
+	if value%2 == 0 || value%3 == 0 {
+		return false
+	}
+	for i := 5; i*i <= value; i += 6 {
+		if value%i == 0 || value%(i+2) == 0 {
+			return false
+		}
+	}
+	return true
+}
+
+// missingNumber
+// 缺失数字
+// 解题思路：只出现一次的数字，使用按位异或“^” 所有数据与索引进行按位异或后剩余的就是缺失的
+func missingNumber(nums []int) int {
+	res := len(nums)
+	for i := 0; i < len(nums); i++ {
+		res = res ^ nums[i]
+		res = res ^ i
+	}
+	return res
+}
+
+// 3的幂
+// 给定一个整数，写一个函数来判断它是否是 3 的幂次方。
+func isPowerOfThree(n int) bool {
+	if n < 1 {
+		return false
+	}
+
+	for n%3 == 0 {
+		n = n / 3
+	}
+	return n == 1
+}
+
+// 将整数n转换为3进制字符串，判断是否第一位为1其他位为0，符合条件则为3的幂。
+func isPowerOfThreeV2(n int) bool {
+	if n < 1 {
+		return false
+	}
+	s := strconv.FormatInt(int64(n), 3)
+	return s[0:1] == "1" && strings.Count(s, "0") == len(s)-1
 }
