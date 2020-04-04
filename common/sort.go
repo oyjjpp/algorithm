@@ -359,3 +359,42 @@ func RadixSort(item []int) []int {
 	}
 	return item
 }
+
+// 计数排序
+// https://juejin.im/post/5bdf13fe51882516f039ff7c
+func CountSort(item []int) []int {
+	// 获取数据最大的值
+	max := item[0]
+	min := item[0]
+	for _, value := range item {
+		if value > max {
+			max = value
+		}
+		if value < min {
+			min = value
+		}
+	}
+	// 需要桶的数量
+	lenth := max - min
+
+	// 根据数列最大值确定统计数组的长度,声明一个桶用于存放数据
+	bucket := make([]int, lenth+1)
+
+	// 遍历数列,统计每个索引的个数，填充到桶中
+	for i := 0; i < len(item); i++ {
+		index := item[i] - min
+		bucket[index]++
+	}
+
+	// 遍历桶，输出结果
+	//index := 0
+	rs := make([]int, 0)
+	for i := 0; i < len(bucket); i++ {
+		if bucket[i] > 0 {
+			for j := 0; j < bucket[j]; j++ {
+				rs = append(rs, i+min)
+			}
+		}
+	}
+	return rs
+}
