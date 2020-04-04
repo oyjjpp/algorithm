@@ -2,15 +2,10 @@ package common
 
 import "testing"
 
-func TestBubbleSort(t *testing.T) {
-	item := []int{12, 4, 1, 523, 6}
-	rs := BubbleSort(item)
-	t.Log(rs)
-}
-
 func TestSort(t *testing.T) {
-	data := []int{5, 2, 0, 1, 3, 1, 4}
-	rs := MergeSort(data)
+	//data := []int{335, 2, 0, 16, 3, 2326, 34, 23, 1, 4}
+	data := []int{10000, 0}
+	rs := RadixSort(data)
 	t.Log(rs)
 }
 

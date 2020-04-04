@@ -3,21 +3,14 @@ package main
 import "fmt"
 
 func main() {
-	param := map[string]int{
-		"a": 1,
-		"b": 2,
-		"c": 3,
+	mychannel := make(chan int, 10)
+	for i := 0; i < 10; i++ {
+		mychannel <- i
 	}
-	for item, v := range param {
-		fmt.Println(item)
+	//close(mychannel)
+	fmt.Println("data length:", len(mychannel))
+	for v := range mychannel {
 		fmt.Println(v)
 	}
-
-	fmt.Println("length=", len(param))
-	mapData := map[string]string{}
-	fmt.Println("length=", len(mapData))
-}
-
-func TestRs() (string, int) {
-	return "abc", 12
+	fmt.Println("data length:", len(mychannel))
 }

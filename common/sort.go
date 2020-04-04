@@ -1,6 +1,10 @@
 // 常见排序算法
 package common
 
+import (
+	"strconv"
+)
+
 // 二路归并
 
 //@link 排序算法 https://juejin.im/post/5a08cc646fb9a045030f9174
@@ -55,6 +59,7 @@ func ShellSort(item []int) []int {
 /**
  * 简单选择排序
  * 循环查找“最小”元素放在首位
+ * 思路：找最小的，和当前位置索引做替换
  * 时间复杂度O(n^2)
  * 空间复杂度O(1)
  * 稳定性 : 不稳定
@@ -200,7 +205,8 @@ func quickSort(item []int, start, end int) {
 }
 
 // QuertSortV2
-// 快速排序 递归 取一个值作为基准,大于基数的放在左边，小于基于的放在右边
+// 快速排序
+// 思路 递归 取一个值作为基准,大于基数的放在左边，小于基于的放在右边
 func QuertSortV2(data []int) []int {
 	if len(data) < 1 {
 		return data
@@ -225,6 +231,7 @@ func QuertSortV2(data []int) []int {
 
 /**
  * @desc 归并排序
+ * 思路： 选择中间索引将数组分割为两个，然后组合两个数组按大小顺序组合
  * 时间复杂度 O(nlog2n)
  * 空间复杂度 O(n) + O(log2n)
  * 稳定性：稳定
@@ -293,21 +300,62 @@ func merge(item []int, left, center, right int) {
 	}
 }
 
+// RadixSort
+// 基数排序
+// 思路：将所有待比较数值统一为同样的数位长度，数位较短的数前面补充零；
+// 然后从最低位开始，依次进行一次排序
 func RadixSort(item []int) []int {
+	if len(item) == 0 {
+		return item
+	}
+	// 首先得到数组中最大的数的位数
+	// 假设第一个元素为最大
 	max := item[0]
-	itemLen := len(item)
 
-	for i := 1; i < itemLen; i++ {
+	for i := 1; i < len(item); i++ {
 		if item[i] > max {
 			max = item[i]
 		}
 	}
+	// 得到最大数的几位数
+	maxlength := len(strconv.Itoa(max))
 
-	time := 0 //数组最大值位数
-	for max > 0 {
-		max = max / 10
-		time++
+	// 定义一个二维数组，表示10个桶，每个桶就是一个一位数组
+	// 1、二维数组包含10个一维数组
+	// 2、为了防止在放入数的时候，数据溢出，则每个一维数组(桶)，大小定为arr.length
+	// 3、明确，基数排序是使用空间换时间的经典算法
+	//count := len(item)
+	bucket := make(map[int][]int, 0)
+
+	// 记录每个桶实际存放多少数据
+	bucketElementCounts := make([]int, 10)
+
+	// 根据最大位数进行循环
+	for i, n := 0, 1; i < maxlength; i++ {
+		// 针对每个元素对应位进行排序处理（第一位、第二位、第三位）
+		for j := 0; j < len(item); j++ {
+			// 取出每个元素的对应位的值
+			digitOfElement := item[j] / n % 10
+			// 放入到对应桶中
+			bucket[digitOfElement] = append(bucket[digitOfElement], item[j])
+
+			// 更新对应桶的元素数量
+			bucketElementCounts[digitOfElement]++
+		}
+
+		// 按照桶的顺序（一维数组的下标一次取出数据，放入原来数组）
+		index := 0
+		for key, number := range bucketElementCounts {
+			// 将每个桶的元素循环输出
+			for k := 0; k < number; k++ {
+				item[index] = bucket[key][k]
+				index++
+			}
+			delete(bucket, key)
+			bucketElementCounts[key] = 0
+		}
+		// 用于处理位数 x/n%10 取出每一个元素的指定位
+		n = n * 10
 	}
-
 	return item
 }
