@@ -1,6 +1,8 @@
 package common
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestSort(t *testing.T) {
 	//data := []int{9, 3, 5, 4, 9, 1, 2, 7, 8, 1, 3, 6, 5, 3, 4, 0, 10, 9, 7, 9}
@@ -25,7 +27,6 @@ func InsertSortV2(data []int) []int {
 }
 
 func TestString(t *testing.T) {
-	str := []byte("Hello String")
-	ReverseString(str)
-	t.Log(string(str))
+	rs := fractionToDecimal(23, 6)
+	t.Log(rs)
 }
