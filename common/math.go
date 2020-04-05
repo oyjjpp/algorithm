@@ -41,6 +41,7 @@ func fractionToDecimal(numerator int, denominator int) string {
 		s += "-"
 	}
 
+	// 如果是负数 通过（*-1） 操作转换为正数
 	// 如果分子为负数 则进行转换
 	if n < 0 {
 		n *= -1
@@ -179,7 +180,6 @@ func countPrimes(n int) int {
 // isPrime
 // 是否为质数
 func isPrime(value int) bool {
-
 	// 校验1/2/3等情况 1就不是质数也不是合数 2/3为质数
 	if value <= 3 {
 		return value >= 2
@@ -216,6 +216,7 @@ func isPowerOfThree(n int) bool {
 		return false
 	}
 
+	// 循环除以3
 	for n%3 == 0 {
 		n = n / 3
 	}

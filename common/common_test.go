@@ -30,3 +30,10 @@ func TestString(t *testing.T) {
 	rs := fractionToDecimal(23, 6)
 	t.Log(rs)
 }
+
+func TestArray(t *testing.T) {
+	cont := Constructor([]int{1, 2, 3})
+	t.Log(cont.ShuffleV2())
+	t.Log(cont.ShuffleV2())
+	t.Log(cont.ShuffleV2())
+}
