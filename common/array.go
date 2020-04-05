@@ -3,6 +3,7 @@ package common
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 )
 
@@ -14,6 +15,8 @@ import (
 // 283、移动零
 // 384、打乱数组
 // 350、两个数组的交集||
+// 334、递增的三元子序列
+// 238、除自身以外数组的乘积
 
 // maxProduct
 // 乘积最大子数组
@@ -220,6 +223,103 @@ func (this *Solution) ShuffleV2() []int {
 
 // intersect
 // 两个数组的交集 II
+// 借助hashMap实现
 func intersect(nums1 []int, nums2 []int) []int {
-	return []int{}
+	if len(nums1) < len(nums2) {
+		nums1, nums2 = nums2, nums1
+	}
+	hashMap := map[int]int{}
+
+	// 将第一个元素存储到hashmap中
+	for _, value := range nums1 {
+		// 已经存在
+		if _, ok := hashMap[value]; ok {
+			hashMap[value]++
+		} else {
+			hashMap[value] = 1
+		}
+	}
+	res := []int{}
+
+	// 通过另一个数组校验
+	for _, value := range nums2 {
+		if _, ok := hashMap[value]; ok {
+			res = append(res, value)
+			hashMap[value]--
+			if hashMap[value] == 0 {
+				delete(hashMap, value)
+			}
+		}
+	}
+	return res
+}
+
+// increasingTriplet
+// 递增的三元子序列
+// 给定一个未排序的数组，判断这个数组中是否存在长度为 3 的递增子序列。
+func increasingTriplet(nums []int) bool {
+	length := 0
+	curEle := 0
+	// [5,1,5,5,2,5,4]
+	for index, value := range nums {
+		if index == 0 {
+			length++
+			curEle = value
+		} else if length >= 3 {
+			return true
+		} else if curEle < value {
+			length++
+			curEle = value
+			if length >= 3 {
+				return true
+			}
+		} else {
+			length = 1
+			curEle = value
+		}
+	}
+	return false
+}
+
+// increasingTriplet
+// 递增的三元子序列【不需要连续】
+// 思路
+// 1、a 始终记录最小元素，b 为某个子序列里第二大的数;
+// 2、接下来不断更新 a，同时保持 b 尽可能的小;
+// 3、如果下一个元素比 b 大，说明找到了三元组;
+func increasingTripletV2(nums []int) bool {
+	one := math.MaxInt32
+	two := math.MaxInt32
+	// [2,4,-2,-3]
+	for _, value := range nums {
+		if value <= one {
+			one = value
+		} else if value <= two {
+			two = value
+		} else {
+			return true
+		}
+	}
+	return false
+}
+
+// 除自身以外数组的乘积
+// 给你一个长度为 n 的整数数组 nums，其中 n > 1，返回输出数组 output ，
+// 其中 output[i] 等于 nums 中除 nums[i] 之外其余各元素的乘积。
+// 思路
+// 1、先计算当前元素左侧的乘积
+// 2、再计算当前元素右侧的乘积，两者相乘
+func productExceptSelf(nums []int) []int {
+	length := len(nums)
+	res := make([]int, length)
+	right, left := 1, 1
+	for i := 0; i < length; i++ {
+		res[i] = left
+		left *= nums[i]
+	}
+	for i := length - 1; i >= 0; i-- {
+		res[i] *= right
+		right *= nums[i]
+	}
+	return res
 }

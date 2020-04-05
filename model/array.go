@@ -107,9 +107,12 @@ func searchMatrix(matrix [][]int, target int) bool {
 
 // searchMatrixV2
 // 向量
-// 编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target。该矩阵具有以下特性：
+// 编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target。
+// 该矩阵具有以下特性：
+// 每行的元素从左到右升序排列
+// 每列的元素从上到下升序排列
 func searchMatrixV2(matrix [][]int, target int) bool {
-	// 行
+	// 行 从矩阵的左下角开始搜索
 	row := len(matrix) - 1
 	// 列
 	col := 0
@@ -119,7 +122,7 @@ func searchMatrixV2(matrix [][]int, target int) bool {
 			row--
 		} else if matrix[row][col] < target {
 			col++
-		} else { // found it
+		} else {
 			return true
 		}
 	}
