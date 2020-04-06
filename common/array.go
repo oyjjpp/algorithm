@@ -107,7 +107,7 @@ func rotate(nums []int, k int) {
 	// 整理翻转
 	reverse(nums, 0, length-1)
 
-	// 根据进行两次翻转
+	// 根据k进行两次翻转
 	reverse(nums, 0, k-1)
 	reverse(nums, k, length-1)
 }
@@ -136,6 +136,7 @@ func rotateV2(nums []int, k int) {
 func containsDuplicate(nums []int) bool {
 	length := len(nums)
 	for i := 0; i < length; i++ {
+		// 选取一个元素与其他进行比较
 		for j := length - 1; j > i; j-- {
 			if nums[i] == nums[j] {
 				return true
@@ -146,9 +147,10 @@ func containsDuplicate(nums []int) bool {
 }
 
 // containsDuplicateV2
-// 借助hash唯一性解决
+// 借助hash唯一性解决,通过空间置换时间
 func containsDuplicateV2(nums []int) bool {
 	length := len(nums)
+	// 创建一个map key存储当前元素值
 	data := map[int]int{}
 	for i := 0; i < length; i++ {
 		if _, ok := data[nums[i]]; ok {
@@ -162,13 +164,18 @@ func containsDuplicateV2(nums []int) bool {
 
 // moveZeroes
 // 移动零
+// 思路
+// 1、使用两个计数器，一个用来递增校验，一个用于递减默认填充零
+// 2、临界值：两个计数器碰撞到一起
 func moveZeroes(nums []int) {
 	l := len(nums) //递减非零计数器
 	i := 0         //递增非零计数器
 	for {
+		// 两个计数器碰撞到一起 则说明已经全部移动完成
 		if i >= l {
 			break
 		}
+		// [4,1,2,0,0,1]
 		if nums[i] == 0 {
 			// 遇到一个0，减少1，最后与i比较作为结束条件
 			l = l - 1
@@ -225,6 +232,7 @@ func (this *Solution) ShuffleV2() []int {
 // 两个数组的交集 II
 // 借助hashMap实现
 func intersect(nums1 []int, nums2 []int) []int {
+	// 将长的数组放入到hashMap中
 	if len(nums1) < len(nums2) {
 		nums1, nums2 = nums2, nums1
 	}
@@ -239,6 +247,7 @@ func intersect(nums1 []int, nums2 []int) []int {
 			hashMap[value] = 1
 		}
 	}
+	// 用于存储结果
 	res := []int{}
 
 	// 通过另一个数组校验
@@ -246,6 +255,7 @@ func intersect(nums1 []int, nums2 []int) []int {
 		if _, ok := hashMap[value]; ok {
 			res = append(res, value)
 			hashMap[value]--
+			// hashMap中数据已经减少到0 则需要将hashMap的key unset掉
 			if hashMap[value] == 0 {
 				delete(hashMap, value)
 			}
@@ -256,9 +266,11 @@ func intersect(nums1 []int, nums2 []int) []int {
 
 // increasingTriplet
 // 递增的三元子序列
-// 给定一个未排序的数组，判断这个数组中是否存在长度为 3 的递增子序列。
+// 给定一个未排序的数组，判断这个数组中是否存在长度为3的递增子序列。
 func increasingTriplet(nums []int) bool {
+	// 记录长度
 	length := 0
+	// 记录当前元素
 	curEle := 0
 	// [5,1,5,5,2,5,4]
 	for index, value := range nums {
@@ -286,7 +298,7 @@ func increasingTriplet(nums []int) bool {
 // 思路
 // 1、a 始终记录最小元素，b 为某个子序列里第二大的数;
 // 2、接下来不断更新 a，同时保持 b 尽可能的小;
-// 3、如果下一个元素比 b 大，说明找到了三元组;
+// 3、如果下一个元素比b大，说明找到了三元组;
 func increasingTripletV2(nums []int) bool {
 	one := math.MaxInt32
 	two := math.MaxInt32
@@ -313,10 +325,12 @@ func productExceptSelf(nums []int) []int {
 	length := len(nums)
 	res := make([]int, length)
 	right, left := 1, 1
+	// 先计算左侧乘积
 	for i := 0; i < length; i++ {
 		res[i] = left
 		left *= nums[i]
 	}
+	// 左侧与右侧相乘
 	for i := length - 1; i >= 0; i-- {
 		res[i] *= right
 		right *= nums[i]

@@ -32,7 +32,7 @@ func ReverseString(s []byte) {
 
 // FirstUniqChar
 // 字符串中的第一个唯一字符
-// 思路 通过两次循环
+// 思路 通过两次循环【两次循环索引是否一致】
 // 第一次循环保存每个元素的最后出现索引
 // 第二次循环验证，最后出现的索引与当前索引是否一致
 func FirstUniqChar(s string) int {
@@ -56,7 +56,7 @@ func FirstUniqChar(s string) int {
 }
 
 // IsAnagram
-// 有效的字母异位词
+// 有效的字母异位词【两个字符串有同样的字母】
 // @link https://juejin.im/post/5cff1601f265da1b94213fa4
 func IsAnagram(s string, t string) bool {
 	// 如果不相等 则不可能是字母异或位词
@@ -178,9 +178,7 @@ func wordBreak(s string, wordDict []string) bool {
 }
 
 // dp[i]：表示前i个元素是否能拆分成词典中的单词，故最终返回dp[len(s)]。
-
 // 状态转移：初始化dp[0]=true，对每一个起始元素i遍历截止元素j（j范围[i+1, len(s)]），若前i个元素已经可以成功拆分且i到j也是一个可选单词，
-
 // 则前j个元素也可以成功拆分，即d[j]置为true。
 
 // StrtoInt
@@ -203,6 +201,7 @@ func StrtoInt(str string) int {
 	ret := 0
 	for i := 0; i < len(str); i++ {
 		cur := str[i]
+		// 当第一个字符出现“+”，“-”则继续
 		if i == 0 && (cur == '+' || cur == '-') {
 			continue
 		}
@@ -210,6 +209,7 @@ func StrtoInt(str string) int {
 		if cur < '0' || cur > '9' {
 			return 0
 		}
+		// 移位
 		ret = ret*10 + int(cur-'0')
 	}
 

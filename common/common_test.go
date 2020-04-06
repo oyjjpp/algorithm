@@ -37,3 +37,27 @@ func TestArray(t *testing.T) {
 	t.Log(cont.ShuffleV2())
 	t.Log(cont.ShuffleV2())
 }
+
+func TestList(t *testing.T) {
+	head := &ListNode{
+		Val: 1,
+		Next: &ListNode{
+			Val: 0,
+			Next: &ListNode{
+				Val: 3,
+				Next: &ListNode{
+					Val: 4,
+					Next: &ListNode{
+						Val: 0,
+						Next: &ListNode{
+							Val: 1,
+						},
+					},
+				},
+			},
+		},
+	}
+	if isPalindromeList(head) != false {
+		t.Error("校验失败")
+	}
+}

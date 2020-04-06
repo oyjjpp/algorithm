@@ -27,7 +27,7 @@ func maxPoints(points [][]int) int {
 }
 
 // fractionToDecimal
-// 分数到小数
+// 分数到小数（string类型）
 // 1、符号的问题，结果是正号还是负号
 // 2、整除还是有余数
 // 3、余数够不够除数，以至于是否需要补零
@@ -71,7 +71,7 @@ func fractionToDecimal(numerator int, denominator int) string {
 		n *= 10
 	}
 
-	// 保存余数 用于校验是否存在死循环
+	// 保存余数,即余数所在位置 用于校验是否存在死循环
 	modMap := make(map[int]int)
 	// 保存余数
 	var buf []int
@@ -80,20 +80,20 @@ func fractionToDecimal(numerator int, denominator int) string {
 	modMap[n%d] = 1
 	n %= d
 
+	// 用于校验是否存在循环
 	isLoop := false
 	start := -1
 	for n%d != 0 {
 		n *= 10
 		buf = append(buf, n/d)
-		idx, ok := modMap[n%d]
-		if !ok {
-			modMap[n%d] = len(buf)
-		} else {
+		if idx, ok := modMap[n%d]; ok {
 			// 死循环
 			isLoop = true
 			// 标记循环开始位置
 			start = idx
 			break
+		} else {
+			modMap[n%d] = len(buf)
 		}
 		n %= d
 	}
@@ -115,6 +115,8 @@ func fractionToDecimal(numerator int, denominator int) string {
 // trailingZeroes
 // 阶乘后的零
 // 给定一个整数 n，返回 n! 结果尾数中零的数量
+// 思路
+// 主要看当前数能被5整数的数据有多少
 func trailingZeroes(n int) int {
 	count := 0
 	for n > 0 {
@@ -126,7 +128,10 @@ func trailingZeroes(n int) int {
 
 // reverseBits
 // 颠倒二进制位
-// 颠倒给定的 32 位无符号整数的二进制位。
+// 颠倒给定的32位无符号整数的二进制位。
+// 思路
+// 1、原数据向右侧推进
+// 2、结果数据向右侧推进
 func reverseBits(num uint32) uint32 {
 	var res uint32
 	for i := 0; i < 32; i++ {
@@ -144,6 +149,8 @@ func reverseBits(num uint32) uint32 {
 // hammingWeight
 // 位1的个数
 // 编写一个函数，输入是一个无符号整数，返回其二进制表达式中数字位数为 ‘1’ 的个数（也被称为汉明重量）
+// 思路
+// 1、通过末尾按位与“&” 操作判断，如果是1 则计数加1
 func hammingWeight(num uint32) int {
 	res := 0
 	for num > 0 {
@@ -179,6 +186,10 @@ func countPrimes(n int) int {
 
 // isPrime
 // 是否为质数
+// 思路
+// 1、2和3是质数
+// 2、能被2和3整除的都不是质数
+// 3、
 func isPrime(value int) bool {
 	// 校验1/2/3等情况 1就不是质数也不是合数 2/3为质数
 	if value <= 3 {
@@ -199,8 +210,11 @@ func isPrime(value int) bool {
 
 // missingNumber
 // 缺失数字
-// 解题思路：只出现一次的数字，使用按位异或“^” 所有数据与索引进行按位异或后剩余的就是缺失的
+// 给定一个包含 0, 1, 2, ..., n 中 n 个数的序列，找出 0 .. n 中没有出现在序列中的那个数
+// 思路
+// 只出现一次的数字，使用按位异或“^” 所有数据与索引进行按位异或后剩余的就是缺失的
 func missingNumber(nums []int) int {
+	// res赋值为n，因为循环时候索引会少一个n
 	res := len(nums)
 	for i := 0; i < len(nums); i++ {
 		res = res ^ nums[i]
@@ -210,7 +224,9 @@ func missingNumber(nums []int) int {
 }
 
 // 3的幂
-// 给定一个整数，写一个函数来判断它是否是 3 的幂次方。
+// 给定一个整数，写一个函数来判断它是否是3的幂次方。
+// 思路
+// 1、循环除三 直到最后，如果除数为1，则代表符合，否则不符合
 func isPowerOfThree(n int) bool {
 	if n < 1 {
 		return false
