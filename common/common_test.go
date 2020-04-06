@@ -39,6 +39,7 @@ func TestArray(t *testing.T) {
 }
 
 func TestList(t *testing.T) {
+	//[1,0,3,4,0,1]
 	head := &ListNode{
 		Val: 1,
 		Next: &ListNode{
@@ -57,7 +58,6 @@ func TestList(t *testing.T) {
 			},
 		},
 	}
-	if isPalindromeList(head) != false {
-		t.Error("校验失败")
-	}
+	res := sortList(head)
+	PrintList(res)
 }
