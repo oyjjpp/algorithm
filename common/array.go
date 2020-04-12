@@ -66,7 +66,9 @@ func maxProduct(nums []int) int {
 // 1、抗阶段：分属两个候选人的票数进行两两对抗抵消
 // 2、计数阶段：计算对抗结果中最后留下的候选人票数是否有效
 func majorityElement(nums []int) int {
+	// 记录次数
 	count := 0
+	// 保存数据
 	major := 0
 	for _, value := range nums {
 		if count == 0 {
@@ -336,4 +338,24 @@ func productExceptSelf(nums []int) []int {
 		right *= nums[i]
 	}
 	return res
+}
+
+//
+func SliceArr(item []int) {
+	left := 0
+	right := len(item) - 1
+	for left < right {
+		if item[left]%2 == 0 && item[right]%2 != 0 {
+			item[left], item[right] = item[right], item[left]
+			left++
+			right--
+		} else {
+			if item[left]%2 != 0 {
+				left++
+			}
+			if item[right]%2 == 0 {
+				right--
+			}
+		}
+	}
 }

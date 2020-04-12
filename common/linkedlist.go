@@ -39,7 +39,7 @@ func reverseList(head *ListNode) *ListNode {
 	for cur != nil {
 		// 临时节点，暂时存放当前节点的下一个节点，用于后移
 		temp := cur.Next
-		// 将新指针转义到当前节点的后面
+		// 将新指针转义到当前节点的后面【此步骤为反转重点】
 		cur.Next = prev
 		// 更新最新的指针
 		prev = cur

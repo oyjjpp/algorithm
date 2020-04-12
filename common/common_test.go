@@ -1,7 +1,10 @@
 package common
 
 import (
+	"strconv"
+	"sync"
 	"testing"
+	"time"
 )
 
 func TestSort(t *testing.T) {
@@ -60,4 +63,63 @@ func TestList(t *testing.T) {
 	}
 	res := sortList(head)
 	PrintList(res)
+}
+
+func TestCount(t *testing.T) {
+	conter := 0
+	for i := 0; i < 5000; i++ {
+		go func() {
+			conter++
+		}()
+	}
+	time.Sleep(1 * time.Second)
+	t.Log(conter)
+}
+
+func TestCountSafe(t *testing.T) {
+	conter := 0
+	var mul sync.Mutex
+	for i := 0; i < 5000; i++ {
+		go func() {
+			defer func() {
+				mul.Unlock()
+			}()
+			mul.Lock()
+			conter++
+
+		}()
+	}
+	time.Sleep(1 * time.Second)
+	t.Log(conter)
+}
+
+func TestCountWaitGroup(t *testing.T) {
+	counter := 0
+	var mut sync.Mutex
+	var group sync.WaitGroup
+	for i := 0; i < 5000; i++ {
+		group.Add(1)
+		go func() {
+			defer func() {
+				mut.Unlock()
+			}()
+			mut.Lock()
+			counter++
+			group.Done()
+		}()
+	}
+	group.Wait()
+	t.Log(counter)
+}
+
+func TestFindDuplicate(t *testing.T) {
+	rs := findDuplicate([]int{1, 2, 3, 4, 5, 6, 1})
+	t.Log(rs)
+}
+
+
+
+func TestStringAdd(t *testing.T) {
+	rs := stringAdd("12342342", "23")
+	t.Log(rs)
 }

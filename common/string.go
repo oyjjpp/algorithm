@@ -1,6 +1,7 @@
 package common
 
 import (
+	"strconv"
 	"unicode"
 )
 
@@ -218,4 +219,35 @@ func StrtoInt(str string) int {
 	} else {
 		return ret
 	}
+}
+
+// "123124646664124” + “6775685684”
+func stringAdd(str1, str2 string) string {
+	sum := 0
+	num1 := len(str1)
+	num2 := len(str2)
+	res := []int{}
+	for num1 > 0 || num2 > 0 || sum > 0 {
+		total := sum
+		if num1 > 0 {
+			num1--
+			cur := str1[num1]
+			total = total + int(cur-'0')
+		}
+
+		if num2 > 0 {
+			num2--
+			total = total + int(str2[num2]-'0')
+		}
+
+		// 考虑进位问题
+		sum = total / 10
+		res = append(res, int(total%10))
+	}
+	resut := ""
+	for _, value := range res {
+		cur := strconv.Itoa(value)
+		resut = cur + resut
+	}
+	return resut
 }
