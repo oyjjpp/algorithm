@@ -1,7 +1,6 @@
 package common
 
 import (
-	"strconv"
 	"sync"
 	"testing"
 	"time"
@@ -113,11 +112,10 @@ func TestCountWaitGroup(t *testing.T) {
 }
 
 func TestFindDuplicate(t *testing.T) {
-	rs := findDuplicate([]int{1, 2, 3, 4, 5, 6, 1})
-	t.Log(rs)
+	item := []int{1, 0, 0, 2, 3, 4, 5, 6, 1}
+	moveZeroes(item)
+	t.Log(item)
 }
-
-
 
 func TestStringAdd(t *testing.T) {
 	rs := stringAdd("12342342", "23")

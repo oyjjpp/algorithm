@@ -1196,3 +1196,13 @@ func TestStructStr(t *testing.T) {
 	t.Log(rs.ClassifyTitle)
 	t.Log(rs.PageInfo)
 }
+
+func TestYunsuan(t *testing.T) {
+	a := "123"
+	b := "123"
+	if strings.Contains(a, b) {
+		t.Log("包含")
+	} else {
+		t.Log("不包含")
+	}
+}

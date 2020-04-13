@@ -95,10 +95,8 @@ func rotate(nums []int, k int) {
 	// 翻转
 	reverse := func(nums []int, start, end int) {
 		for start < end {
-			temp := nums[start]
-			nums[start] = nums[end]
+			nums[start], nums[end] = nums[end], nums[start]
 			start++
-			nums[end] = temp
 			end--
 		}
 	}
@@ -180,13 +178,13 @@ func moveZeroes(nums []int) {
 		// [4,1,2,0,0,1]
 		if nums[i] == 0 {
 			// 遇到一个0，减少1，最后与i比较作为结束条件
-			l = l - 1
+			l--
 			// 把0前后两部分合并
 			nums = append(nums[0:i], nums[i+1:]...)
 			// 在末尾补回0
 			nums = append(nums, 0)
 		} else {
-			i = i + 1 //非0计数器自增
+			i++ //非0计数器自增
 		}
 	}
 	return
@@ -340,7 +338,8 @@ func productExceptSelf(nums []int) []int {
 	return res
 }
 
-//
+// SliceArr
+// 将数组切割成偶数和奇数两部分
 func SliceArr(item []int) {
 	left := 0
 	right := len(item) - 1

@@ -147,7 +147,9 @@ func HeadSort(item []int) []int {
 func BubbleSort(item []int) []int {
 	n := len(item)
 
+	// 从左侧开始循环
 	for i := 0; i < n-1; i++ {
+		// 循环找到最小的放到第一位
 		for j := n - 1 - 1; j >= i; j-- {
 			if item[j+1] < item[j] {
 				temp := item[j]
