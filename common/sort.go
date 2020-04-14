@@ -304,8 +304,43 @@ func merge(item []int, left, center, right int) {
 	}
 }
 
+func mergeSortV2(item []int, left, center, right int) {
+	temp := make([]int, right-left+1)
+	i := 0
+	// 左边开始
+	start := left
+	// 右边开始
+	end := center + 1
+	for start <= center && end <= right {
+		if item[start] < item[end] {
+			temp[i] = item[start]
+			start++
+		} else {
+			temp[i] = item[end]
+			end++
+		}
+		i++
+	}
+
+	for start <= center {
+		temp[i] = item[start]
+		i++
+		start++
+	}
+	for end <= end {
+		temp[i] = item[end]
+		i++
+		end++
+	}
+	// 将结果返回给原素组
+	for i := 0; i < len(temp); i++ {
+		item[left+i] = temp[i]
+	}
+}
+
 // RadixSort
 // 基数排序
+// 时间复杂度：O（wn） w:元素的最大长度，N元素的个数
 // 思路：将所有待比较数值统一为同样的数位长度，数位较短的数前面补充零；
 // 然后从最低位开始，依次进行一次排序
 func RadixSort(item []int) []int {
