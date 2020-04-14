@@ -2,6 +2,7 @@
 package common
 
 import (
+	"fmt"
 	"strconv"
 )
 
@@ -343,9 +344,9 @@ func mergeSortV2(item []int, left, center, right int) {
 // 时间复杂度：O（wn） w:元素的最大长度，N元素的个数
 // 思路：将所有待比较数值统一为同样的数位长度，数位较短的数前面补充零；
 // 然后从最低位开始，依次进行一次排序
-func RadixSort(item []int) []int {
+func RadixSort(item []int) {
 	if len(item) == 0 {
-		return item
+		return
 	}
 	// 首先得到数组中最大的数的位数
 	// 假设第一个元素为最大
@@ -382,9 +383,10 @@ func RadixSort(item []int) []int {
 			bucketElementCounts[digitOfElement]++
 		}
 
-		// 按照桶的顺序（一维数组的下标一次取出数据，放入原来数组）
+		// 按照桶的顺序（一维数组的下标一次取出数据，放入原来数组）【数组按顺序输出】
 		index := 0
 		for key, number := range bucketElementCounts {
+			fmt.Println(key, number)
 			// 将每个桶的元素循环输出
 			for k := 0; k < number; k++ {
 				item[index] = bucket[key][k]
@@ -396,13 +398,14 @@ func RadixSort(item []int) []int {
 		// 用于处理位数 x/n%10 取出每一个元素的指定位
 		n = n * 10
 	}
-	return item
 }
 
 // 计数排序
 // https://juejin.im/post/5bdf13fe51882516f039ff7c
+// https://juejin.im/post/5bfc9b34f265da6115107afe
+// O(n+k)
 func CountSort(item []int) []int {
-	// 获取数据最大的值
+	// 获取数据最大的值和最小的值用于范围
 	max := item[0]
 	min := item[0]
 	for _, value := range item {
@@ -429,6 +432,7 @@ func CountSort(item []int) []int {
 	//index := 0
 	rs := make([]int, 0)
 	for i := 0; i < len(bucket); i++ {
+		// 如果存在数据
 		if bucket[i] > 0 {
 			for j := 0; j < bucket[j]; j++ {
 				rs = append(rs, i+min)
