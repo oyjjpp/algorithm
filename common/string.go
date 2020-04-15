@@ -1,6 +1,7 @@
 package common
 
 import (
+	"math"
 	"strconv"
 	"unicode"
 )
@@ -250,4 +251,75 @@ func stringAdd(str1, str2 string) string {
 		resut = cur + resut
 	}
 	return resut
+}
+
+// 字符串转换成整数
+func myAtoi(str string) int {
+	if len(str) == 0 {
+		return 0
+	}
+	// 去掉字符串前面空格
+	stripLeadingWhitespace := func(str string) string {
+		result := ""
+		isLeading := true
+		for _, char := range str {
+			if isLeading {
+				if char != ' ' {
+					isLeading = false
+					result = result + string(char)
+				}
+			} else {
+				result = result + string(char)
+			}
+		}
+		return result
+	}
+	strippedStr := stripLeadingWhitespace(str)
+	sign := 1
+	result := 0
+	for i, char := range strippedStr {
+		if i == 0 {
+			if char == '-' {
+				sign = -1
+			} else if char == '+' {
+				sign = 1
+			} else if int(char-'0') >= 0 && int(char-'0') <= 9 {
+				result = result*10 + int(char-'0')
+			} else {
+				return result
+			}
+		} else {
+			if int(char-'0') < 0 || int(char-'9') > 9 {
+				break
+			}
+			// 向下溢出
+			if sign == -1 && result*10+sign*int(char-'0') < math.MinInt32 {
+				return math.MinInt32
+			}
+			// 向上溢出
+			if sign == 1 && result*10+int(char-'0') > math.MaxInt32 {
+				return math.MaxInt32
+			}
+			result = result*10 + sign*int(char-'0')
+		}
+	}
+	return result
+}
+
+// stripLeadingWhitespace
+// 去掉开头的空白字符串
+func stripLeadingWhitespace(str string) string {
+	result := ""
+	isLeading := true
+	for _, char := range str {
+		if isLeading {
+			if char != ' ' {
+				isLeading = false
+				result = result + string(char)
+			}
+		} else {
+			result = result + string(char)
+		}
+	}
+	return result
 }
