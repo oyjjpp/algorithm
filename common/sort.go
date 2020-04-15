@@ -117,11 +117,12 @@ func maxHeapify(item []int, heapSize, index int) {
 	}
 }
 
-/**
- * @desc 堆排序
- * @param 时间复杂度 O(nlogn)
- */
-func HeadSort(item []int) []int {
+// @desc  堆排序
+// 时间复杂度 O(nlogn)
+// 思路
+// 通过去构造大顶推每次构造之后最大元素在堆顶，然后把堆顶元素放在数组的末尾，不断的构造堆、交换、构造堆交换。完成数组的排序
+// @link http://www.xingxing2019.cn/articleDetail?article_id=40
+func HeadSort(item []int) {
 	n := len(item)
 	startIndex := (n - 1 - 1) / 2
 
@@ -136,8 +137,6 @@ func HeadSort(item []int) []int {
 		item[i] = temp
 		maxHeapify(item, i, 0)
 	}
-
-	return item
 }
 
 // 冒泡排序
@@ -172,18 +171,15 @@ func QuikcSort(item []int) []int {
 	return item
 }
 
-//交换
-func swap(item []int, i, j int) {
-	temp := item[i]
-	item[i] = item[j]
-	item[j] = temp
-}
-
 //@desc 快速排序
 //@param item 待排序的数组
 //@param start 开始位置
 //@param end 结束位置
 func quickSort(item []int, start, end int) {
+	swap := func(item []int, i, j int) {
+		item[i], item[j] = item[j], item[i]
+	}
+
 	if start < end {
 		//第一个元素作为基数
 		pivot := item[start]

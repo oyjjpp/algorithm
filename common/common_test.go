@@ -113,7 +113,7 @@ func TestCountWaitGroup(t *testing.T) {
 
 func TestFindDuplicate(t *testing.T) {
 	item := []int{1, 0, 0, 2, 3, 4, 5, 6, 1}
-	RadixSort(item)
+	HeadSort(item)
 	t.Log(item)
 }
 
