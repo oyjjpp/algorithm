@@ -1,28 +1,30 @@
 package main
 
-import (
-	"fmt"
-	"time"
-)
+import "fmt"
 
 func main() {
-	theMine := []string{"ore1", "ore2", "ore3"}
-	oreChan := make(chan string)
+	item := []int{2, 1}
+	rs := searchTwo(item)
+	fmt.Println(rs)
+}
 
-	// 协程1
-	go func(item []string) {
-		for _, v := range item {
-			oreChan <- v
-			fmt.Println("send data")
-		}
-	}(theMine)
+func searchTwo(item []int) int {
+	if len(item) < 2 {
+		return 0
+	}
 
-	// 协程2
-	go func() {
-		for i := 0; i < 3; i++ {
-			foundOne := <-oreChan
-			fmt.Println("Miner:Received " + foundOne + " from finder")
+	one := item[0]
+	two := item[1]
+	if two > one {
+		one, two = two, one
+	}
+	for i := 2; i < len(item); i++ {
+		if item[i] > one {
+			two = one
+			one = item[i]
+		} else if item[i] > two {
+			two = item[i]
 		}
-	}()
-	<-time.After(time.Second * 2)
+	}
+	return two
 }
