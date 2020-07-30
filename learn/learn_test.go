@@ -541,3 +541,7 @@ func TestFirst(t *testing.T) {
 
 // 类型推断
 // 多个变量进行赋值
+
+func TestCond(t *testing.T) {
+	with_cond_v2()
+}
