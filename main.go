@@ -3,55 +3,18 @@ package main
 import (
 	"bytes"
 	"log"
-	"net"
 	"os"
 	"os/exec"
 	"os/signal"
 	"strings"
 	"syscall"
 
-	"github.com/algorithm/oyjjpp/network/socket"
+	"github.com/oyjjpp/algorithm/network/socket"
 )
 
 func main() {
-	socket.Servermain()
-}
-
-// 网络文件描述符
-func netFileDesc() {
-	ln, err := net.Listen("tcp", ":8091")
-	if err != nil {
-		log.Fatal(err)
-	}
-	tcpln := ln.(*net.TCPListener)
-	nf, err := tcpln.File()
-	ln.Close()
-
-	fd := nf.Fd()
-	log.Println(fd)
-
-	cid, _, err := syscall.Accept(int(fd))
-	if err != nil {
-		log.Fatal(err)
-	}
-	syscall.Close(cid)
-	syscall.Close(int(fd))
-}
-
-// fileDesc
-// 文件描述符
-func fileDesc() {
-	path, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
-	fileName := path + "index.go"
-	fileA, _ := os.OpenFile(fileName, os.O_RDONLY, 0666)
-	log.Println(fileA.Fd())
-	fileA.Close()
-	fileB, _ := os.OpenFile(fileName, os.O_RDONLY, 0666)
-	log.Println(fileB.Fd())
-	fileB.Close()
+	// socket.Servermain()
+	socket.Clientmain()
 }
 
 // createProcess
@@ -74,7 +37,7 @@ func signalNotify() {
 	done := make(chan bool, 1)
 
 	// 注册信息号
-	signal.Notify(signs, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(signs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGUSR2)
 
 	go func() {
 		sig := <-signs
@@ -85,8 +48,4 @@ func signalNotify() {
 	log.Println("waiting singal")
 	<-done
 	log.Println("exting")
-}
-
-func forkProcess() {
-	// file := netListener.File()
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func Servermain() {
-	listener, err := net.Listen("tcp", "8091")
+	listener, err := net.Listen("tcp", ":8091")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -45,6 +45,7 @@ func handler(conn net.Conn) {
 		}
 
 		log.Println("[server] request from", string(request))
-		conn.Write([]byte("hello" + string(request) + ", time" + time.Now().Format("2006-01-02 15:04:05")))
+		// 输出内容给客户端
+		conn.Write([]byte("hello " + string(request) + ", time" + time.Now().Format("2006-01-02 15:04:05")))
 	}
 }
