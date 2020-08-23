@@ -57,3 +57,7 @@ func TestTypeAndValue(t *testing.T) {
 	t.Log(reflect.TypeOf(f), reflect.ValueOf(f))
 	t.Log(reflect.ValueOf(f).Type())
 }
+
+func TestWithChannelTime(t *testing.T) {
+	withChannelTime()
+}
