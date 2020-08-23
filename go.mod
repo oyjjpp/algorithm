@@ -1,4 +1,4 @@
-module algorithm
+module github.com/oyjjpp/algorithm
 
 go 1.13
 

@@ -9,10 +9,12 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+
+	"github.com/algorithm/oyjjpp/network/socket"
 )
 
 func main() {
-
+	socket.Servermain()
 }
 
 // 网络文件描述符
