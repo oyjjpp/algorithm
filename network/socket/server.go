@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func main() {
+func Servermain() {
 	listener, err := net.Listen("tcp", "8091")
 	if err != nil {
 		log.Fatal(err)
