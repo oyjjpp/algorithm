@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"database/sql"
 	"log"
 	"os"
 	"os/exec"
@@ -9,12 +10,31 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/oyjjpp/algorithm/network/socket"
+	"github.com/pkg/errors"
 )
 
+func getSql() error {
+	return errors.Wrap(sql.ErrNoRows, "GetSql failed")
+}
+
+func call() error {
+	return errors.WithMessage(getSql(), "bar failed")
+}
+
+func withStack() {
+	err := call()
+	if errors.Cause(err) == sql.ErrNoRows {
+		log.Printf("data not found, %v\n", err)
+		log.Printf("%+v\n", err)
+		return
+	}
+	if err != nil {
+		log.Printf("got err,  %+v\n", err)
+	}
+}
+
 func main() {
-	// socket.Servermain()
-	socket.Clientmain()
+	withStack()
 }
 
 // createProcess
