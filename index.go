@@ -9,6 +9,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"log"
 	"sync"
 	"time"
 
@@ -156,4 +157,9 @@ func sampleConsumption(wg *sync.WaitGroup) {
 		fmt.Println("channel close")
 	}
 	wg.Done()
+}
+
+func PrintlnByteLen() {
+	data := []byte("this")
+	log.Println(len(data))
 }

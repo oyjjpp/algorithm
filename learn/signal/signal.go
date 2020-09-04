@@ -1,40 +1,12 @@
-package main
+// @link https://books.studygolang.com/The-Golang-Standard-Library-by-Example/chapter16/16.03.html
+package signal
 
 import (
-	"bytes"
-	"flag"
 	"log"
 	"os"
-	"os/exec"
 	"os/signal"
-	"strings"
 	"syscall"
 )
-
-func main() {
-	signalNotify()
-}
-
-// CmdParam
-// 命令行参数
-func CmdParam() {
-	port := flag.Int("port", 80, "input port")
-	flag.Parse()
-	log.Println(*port)
-}
-
-// createProcess
-// 创建进程
-func createProcess() {
-	cmd := exec.Command("tr", "a-z", "A-Z")
-	cmd.Stdin = strings.NewReader("some input")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	if err := cmd.Run(); err != nil {
-		log.Fatal(err)
-	}
-	log.Printf("in all caps:%q\n", out.String())
-}
 
 var firstSigUsr1 = true
 
