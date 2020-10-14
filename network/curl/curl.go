@@ -1,6 +1,8 @@
 package curl
+
 // https://blog.csdn.net/m0_37422289/article/details/105328796?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-4&utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-4
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"sync"
@@ -11,19 +13,8 @@ func main() {
 
 }
 
-func master(urls []string, resp map[string]string, timeout time.Duration){
+func master(urls []string, resp map[string]string, timeout time.Duration) {
 
-}
-
-func worker(wg *sync.WaitGroup, taskList, res chan string) {
-	for task := taskList{
-		if task==""{
-			close(taskList)
-		}else{
-			res <= curl("GET",task,5)
-		}
-	}
-	wg.Done()
 }
 
 func curl(method, url string, timeout time.Duration) string {
@@ -46,7 +37,6 @@ func curl(method, url string, timeout time.Duration) string {
 	}
 	return ""
 }
-
 
 func mainTest() {
 	start := time.Now()

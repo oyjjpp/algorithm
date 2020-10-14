@@ -20,7 +20,7 @@ func signalNotify() {
 	signs := make(chan os.Signal, 1)
 
 	// 注册信息号
-	signal.Notify(signs, syscall.SIGUSR1, syscall.SIGHUP)
+	signal.Notify(signs, syscall.SIGILL, syscall.SIGHUP)
 
 	go func() {
 		for {
@@ -28,7 +28,7 @@ func signalNotify() {
 			case syscall.SIGHUP:
 				log.Println("sighub, reset sighub")
 				signal.Reset(syscall.SIGHUP)
-			case syscall.SIGUSR1:
+			case syscall.SIGILL:
 				log.Println("fisrt usr1, notify intereupt whitch had ignore!")
 				ch := make(chan os.Signal, 1)
 				signal.Notify(ch, os.Interrupt)
