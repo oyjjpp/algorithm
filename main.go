@@ -7,12 +7,32 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"runtime"
 	"strings"
+	"sync"
 	"syscall"
 )
 
 func main() {
-	signalNotify()
+	waitBug()
+}
+
+// 对共享内存保护的失误
+func waitBug() {
+	data := [10]int{}
+	var group sync.WaitGroup
+	group.Add(len(data))
+
+	for _, p := range data {
+		log.Println("当前协程数量", runtime.NumGoroutine())
+		log.Println(p)
+		go func(p int) {
+			log.Println(p)
+			defer group.Done()
+		}(p)
+		// group.Wait()
+	}
+	group.Wait()
 }
 
 // CmdParam
