@@ -16,17 +16,7 @@ func maxPathSum(root *TreeNode) int {
 	maxPath(root, &maxSum)
 	return maxSum
 }
-/*
-data1 := &TreeNode{
-	Val:  -10,
-	Left: &TreeNode{Val: 9},
-	Right: &TreeNode{
-		Val:   20,
-		Left:  &TreeNode{Val: 15},
-		Right: &TreeNode{Val: 7},
-	},
-}
-*/
+
 func maxPath(root *TreeNode, maxSum *int) int {
 	if root == nil {
 		return 0
