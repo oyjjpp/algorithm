@@ -6,21 +6,27 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-// preorder 前序遍历参数  中左右
-// inorder 中序遍历参数	左中右
+// buildTree
+// 构建二叉树
+// @param preorder 前序遍历参数  中左右
+// @param inorder 中序遍历参数	左中右
 func buildTree(preorder []int, inorder []int) *TreeNode {
-    p, d := 0, make(map[int]int, len(inorder))
-    for i, j := range inorder {
-        d[j] = i
+    if len(preorder) == 0 {
+        return nil
     }
-    var f func(int, int) *TreeNode; f = func(i, j int) (t *TreeNode) {
-        if i < j {
-            t = &TreeNode{Val: preorder[p]}
-            p++
-            t.Left = f(i, d[t.Val])
-            t.Right = f(d[t.Val] + 1, j)
+    // 前序遍历第一个元素为根节点
+    root := &TreeNode{preorder[0], nil, nil}
+    
+    // 在中序遍历中查找根节点位置
+    i := 0
+    for ; i < len(inorder); i++ {
+        if inorder[i] == preorder[0] {
+            break
         }
-        return 
     }
-    return f(0, len(inorder))
+    
+    // 递归构建左右子树
+    root.Left = buildTree(preorder[1:len(inorder[:i])+1], inorder[:i])
+    root.Right = buildTree(preorder[len(inorder[:i])+1:], inorder[i+1:])
+    return root
 }
