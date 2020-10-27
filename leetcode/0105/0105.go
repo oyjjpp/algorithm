@@ -26,7 +26,10 @@ func buildTree(preorder []int, inorder []int) *TreeNode {
 	}
 
 	// 递归构建左右子树
+	// 参数为左子数的前序遍历，中序遍历
+	// 前序遍历的左子树需要通过中序遍历计算出的长度确定
 	root.Left = buildTree(preorder[1:len(inorder[:i])+1], inorder[:i])
+	// 参数为右子数的前序遍历，中序遍历
 	root.Right = buildTree(preorder[len(inorder[:i])+1:], inorder[i+1:])
 	return root
 }
