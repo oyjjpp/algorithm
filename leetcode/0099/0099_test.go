@@ -17,6 +17,18 @@ func TestRecoverTree(t *testing.T){
 	inorder(data)
 }
 
+func TestRecoverTreeV2(t *testing.T){
+	data := &TreeNode{
+		Val:7,
+		Left:&TreeNode{Val:2,Left:&TreeNode{Val:1},Right:&TreeNode{Val:3}},
+		Right:&TreeNode{Val:6,Left:&TreeNode{Val:5},Right:&TreeNode{Val:4}},
+	}
+	recoverTreeV2(data)
+	
+	// 中序遍历
+	inorder(data)
+}
+
 // 中序遍历
 // inorder
 func inorder(root *TreeNode){

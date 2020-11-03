@@ -31,6 +31,7 @@ func recoverTree(root *TreeNode)  {
     log.Println(nums)
     // 查找交换的节点
     x, y := findTwoSwapped(nums)
+    // TODO 如果都是-1 则代表已经是二叉搜索树 1237564
     log.Println(x, y)
     recover(root, 2, x, y)
 }
@@ -74,4 +75,38 @@ func recover(root *TreeNode, count, x, y int) {
     }
     recover(root.Left, count, x, y)
     recover(root.Right, count, x, y)
+}
+
+
+// recoverTreeV2
+// 恢复一个二叉搜索树 通过节点指针保存
+func recoverTreeV2(root *TreeNode)  {
+	var x, y, pre  *TreeNode
+    
+    // 定义一个中序遍历函数，将结果保存到数组中
+    var inorder func(node *TreeNode)
+    inorder = func(node *TreeNode) {
+        if node == nil {
+            return
+        }
+        log.Println("node", node.Val)
+        inorder(node.Left)
+        if pre==nil {
+			pre = node
+			log.Println(pre.Val)
+		} else {
+			if pre.Val > node.Val {
+				y = node
+				if x==nil {
+					x = pre
+				}
+			}
+		}
+        inorder(node.Right)
+    }
+    // 中序遍历二叉树
+    inorder(root)
+    if x!= nil && y != nil{
+		recover(root, 2, x.Val, y.Val)
+	}
 }
