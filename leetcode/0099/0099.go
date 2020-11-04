@@ -77,7 +77,6 @@ func recover(root *TreeNode, count, x, y int) {
     recover(root.Right, count, x, y)
 }
 
-
 // recoverTreeV2
 // 恢复一个二叉搜索树 通过节点指针保存
 func recoverTreeV2(root *TreeNode)  {
@@ -101,6 +100,8 @@ func recoverTreeV2(root *TreeNode)  {
 					x = pre
 				}
 			}
+			// 保存当前节点作为上一个节点
+			pre = node
 		}
         inorder(node.Right)
     }
