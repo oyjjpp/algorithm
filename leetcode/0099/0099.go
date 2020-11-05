@@ -36,13 +36,17 @@ func recoverTree(root *TreeNode)  {
     recover(root, 2, x, y)
 }
 
+// 1237564
 // findTwoSwapped
 // 找到两个交换的索引位置值
 func findTwoSwapped(nums []int) (int, int) {
+	// 用于存储错误交换的位置
     x, y := -1, -1
     for i := 0; i < len(nums) - 1; i++ {
 		// TODO 两个错误的位置一定是相连的吗？
+		// 当后一个小于前一个的时候进行存储
         if nums[i + 1] < nums[i] {
+			// 为什么y可以进行替换？找到最终的错的位置
             y = nums[i+1]
             if x == -1 {
                 x = nums[i]
