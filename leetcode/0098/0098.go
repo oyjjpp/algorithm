@@ -23,15 +23,14 @@ func isValidBST(root *TreeNode) bool {
 		if pre == nil {
 			pre = root
 		}else{
-			if pre.Val>root.Val{
+			if pre.Val>=root.Val{
 				isValid = false
 				return
 			}
 			pre = root
 		}
 		log.Println(pre.Val)
-		
-		inorder(root.Left)
+		inorder(root.Right)
 	}
 	inorder(root)
 	return isValid

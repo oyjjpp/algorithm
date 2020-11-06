@@ -7,7 +7,48 @@
 >所有左子树和右子树自身必须也是二叉搜索树。  
 
 ### 思路
-通过中序遍历，然后对比前后节点的值
+通过中序遍历，然后对比前后节点的值，如果前一个节点值大于当前节点值，则不是有效二叉搜索树
+
+### 代码
+```golang
+package leetcode
+
+import (
+	"log"
+)
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func isValidBST(root *TreeNode) bool {
+	var pre *TreeNode
+	isValid := true
+	
+	var inorder func (root *TreeNode)
+	inorder = func(root *TreeNode){
+		if root == nil{
+			return 
+		}
+		inorder(root.Left)
+		if pre == nil {
+			pre = root
+		}else{
+			if pre.Val>=root.Val{
+				isValid = false
+				return
+			}
+			pre = root
+		}
+		log.Println(pre.Val)
+		inorder(root.Right)
+	}
+	inorder(root)
+	return isValid
+}
+```
 
 ### 参考
 来源：力扣（LeetCode）  
