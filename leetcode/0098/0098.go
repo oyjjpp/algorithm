@@ -13,17 +13,17 @@ type TreeNode struct {
 func isValidBST(root *TreeNode) bool {
 	var pre *TreeNode
 	isValid := true
-	
-	var inorder func (root *TreeNode)
-	inorder = func(root *TreeNode){
-		if root == nil{
-			return 
+
+	var inorder func(root *TreeNode)
+	inorder = func(root *TreeNode) {
+		if root == nil {
+			return
 		}
 		inorder(root.Left)
 		if pre == nil {
 			pre = root
-		}else{
-			if pre.Val>=root.Val{
+		} else {
+			if pre.Val >= root.Val {
 				isValid = false
 				return
 			}

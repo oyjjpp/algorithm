@@ -21,7 +21,7 @@ func maxPath(root *TreeNode, maxSum *int) int {
 	if root == nil {
 		return 0
 	}
-	
+
 	// 求左右子数最大路径和
 	left := max(0, maxPath(root.Left, maxSum))
 	right := max(0, maxPath(root.Right, maxSum))
