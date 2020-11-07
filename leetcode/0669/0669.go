@@ -15,12 +15,13 @@ func trimBST(root *TreeNode, low int, high int) *TreeNode {
 	if root == nil {
 		return root
 	}
-	// 当前节点大于最大边界
+	// 当前节点大于最大边界，则当前节点及右节点已经越界，所以只保留左子数
 	if root.Val > high {
-		trimBST(root.Left, low, high)
+		return trimBST(root.Left, low, high)
 	}
+	// 当前节点小于最小边界，则当前节点及左节点已经越界，所以值保留右子数
 	if root.Val < low {
-		trimBST(root.Right, low, high)
+		return trimBST(root.Right, low, high)
 	}
 	root.Left = trimBST(root.Left, low, high)
 	root.Right = trimBST(root.Right, low, high)
