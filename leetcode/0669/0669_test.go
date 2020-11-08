@@ -28,11 +28,16 @@ func TestTrimBST(t *testing.T) {
 		},
 	}
 	inorder(data)
-	trimBST(data, 3, 5)
+	rsData := trimBST(data, 3, 5)
 	log.Println("修剪之后")
+	
 	inorder(data)
 	rs, _ := json.Marshal(data)
 	log.Println(string(rs))
+	
+	inorder(rsData)
+	rs1, _ := json.Marshal(rsData)
+	log.Println(string(rs1))
 }
 
 func inorder(root *TreeNode) {

@@ -1,5 +1,10 @@
 package leetcode
 
+import(
+	"log"
+	"encoding/json"
+)
+
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
@@ -15,13 +20,29 @@ func trimBST(root *TreeNode, low int, high int) *TreeNode {
 	if root == nil {
 		return root
 	}
+	/*
+	data := &TreeNode{
+		Val:  2,
+		Left: &TreeNode{Val: 1},
+		Right: &TreeNode{
+			Val:   4,
+			Left:  &TreeNode{Val: 3},
+			Right: &TreeNode{Val: 6},
+		},
+	}
+	*/
+	// [3, 5]
 	// 当前节点大于最大边界，则当前节点及右节点已经越界，所以只保留左子数
 	if root.Val > high {
-		return trimBST(root.Left, low, high)
+		root = trimBST(root.Left, low, high)
+		return root
 	}
 	// 当前节点小于最小边界，则当前节点及左节点已经越界，所以值保留右子数
 	if root.Val < low {
-		return trimBST(root.Right, low, high)
+		root = trimBST(root.Right, low, high)
+		rs, _ := json.Marshal(root)
+		log.Println(string(rs))
+		return root
 	}
 	root.Left = trimBST(root.Left, low, high)
 	root.Right = trimBST(root.Right, low, high)
