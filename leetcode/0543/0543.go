@@ -27,6 +27,9 @@ func diameterOfBinaryTree(root *TreeNode) int {
 	
 	postOrder(root)
 	// 一条路径的长度为该路径经过的节点减一
+	if maxPath==0 {
+		return 0
+	}
 	return maxPath-1
 }
 
