@@ -14,8 +14,8 @@ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 			root = root.Left
 		} else if root.Val < p.Val && root.Val < q.Val {
 			root = root.Right
-		} else{
-            break
+		} else {
+			break
 		}
 	}
 	return root

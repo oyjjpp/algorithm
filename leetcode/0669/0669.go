@@ -1,8 +1,8 @@
 package leetcode
 
-import(
-	"log"
+import (
 	"encoding/json"
+	"log"
 )
 
 type TreeNode struct {
@@ -21,15 +21,15 @@ func trimBST(root *TreeNode, low int, high int) *TreeNode {
 		return root
 	}
 	/*
-	data := &TreeNode{
-		Val:  2,
-		Left: &TreeNode{Val: 1},
-		Right: &TreeNode{
-			Val:   4,
-			Left:  &TreeNode{Val: 3},
-			Right: &TreeNode{Val: 6},
-		},
-	}
+		data := &TreeNode{
+			Val:  2,
+			Left: &TreeNode{Val: 1},
+			Right: &TreeNode{
+				Val:   4,
+				Left:  &TreeNode{Val: 3},
+				Right: &TreeNode{Val: 6},
+			},
+		}
 	*/
 	// [3, 5]
 	// 当前节点大于最大边界，则当前节点及右节点已经越界，所以只保留左子数
