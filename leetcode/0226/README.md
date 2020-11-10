@@ -25,7 +25,8 @@ data := &TreeNode{
 	},
 }
 
-返回false
+返回
+{"Val":4,"Left":{"Val":7,"Left":{"Val":9,"Left":null,"Right":null},"Right":{"Val":7,"Left":null,"Right":null}},"Right":{"Val":2,"Left":{"Val":3,"Left":null,"Right":null},"Right":{"Val":1,"Left":null,"Right":null}}}
 ```
 
 ### 代码
