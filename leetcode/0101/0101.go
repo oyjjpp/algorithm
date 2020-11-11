@@ -1,9 +1,5 @@
 package leetcode
 
-import(
-    "log"
-)
-
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
@@ -13,36 +9,28 @@ type TreeNode struct {
 // isSymmetric
 // 对称二叉树
 func isSymmetric(root *TreeNode) bool {
-    data := []int{}
-    
-    var inorder func(root *TreeNode)
-    inorder = func(root *TreeNode){
-        if root == nil{
-            return
-        }
-        inorder(root.Left)
-        data = append(data, root.Val)
-        inorder(root.Right)
-    }
-    inorder(root)
-    dataLen := len(data)
-    if dataLen ==0 {
+    // 根节点为nil则是对称二叉树
+    if root == nil{
         return true
     }
-    
-    num := dataLen/2
-    if dataLen%2 == 0{
-        return false
-    }
-    data1 := data[:num]
-    data2 := data[num+1:]
-    log.Println(data, data1, data2)
-    
-    for i:=0;i<len(data1);i++{
-        log.Println(data1[i], data2[num-i-1])
-        if(data1[i]!=data2[num-i-1]){
+    var order func(nodeL, nodeR *TreeNode) bool
+    order = func(nodeL, nodeR *TreeNode) bool {
+        // 同时为空
+        if nodeL==nil && nodeR==nil{
+            return true
+        }
+        // 一个为空一个不为空
+        if nodeL==nil && nodeR != nil{
             return false
         }
+        if nodeL!=nil && nodeR==nil{
+            return false
+        }
+        // 递归校验 左节点的左子数与右节点的右子数 左节点的右子数和右节点的左子数
+        if(nodeL.Val == nodeR.Val){
+            return order(nodeL.Left, nodeR.Right) && order(nodeL.Right, nodeR.Left)
+        }
+        return false
     }
-    return true 
+    return order(root.Left, root.Right)
 }

@@ -28,7 +28,7 @@ func TestIsSymmetric(t *testing.T){
         },
         Right:&TreeNode{
             Val:2,
-            Right:&TreeNode{Val:2},
+            Left:&TreeNode{Val:2},
         },
     }
     
@@ -36,3 +36,7 @@ func TestIsSymmetric(t *testing.T){
     rs := isSymmetric(data)
     log.Println(rs)
 }
+// 324 1 324
+// 2 3 1 2 3
+// 1 2 2 nul 3 null 3
+// 1 2 2 2 null 2
