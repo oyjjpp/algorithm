@@ -1,6 +1,6 @@
 package leetcode
 
-import(
+import (
 	"log"
 )
 
@@ -13,20 +13,20 @@ type TreeNode struct {
 // isUnivalTree
 // 单值二叉树
 func isUnivalTree(root *TreeNode) bool {
-    data := map[int]bool{}
-    
-    var preOrder func(root *TreeNode)
-    preOrder = func(root *TreeNode){
+	data := map[int]bool{}
+
+	var preOrder func(root *TreeNode)
+	preOrder = func(root *TreeNode) {
 		if root == nil {
 			return
 		}
-		if _,ok := data[root.Val]; !ok{
+		if _, ok := data[root.Val]; !ok {
 			data[root.Val] = true
 		}
 		preOrder(root.Left)
 		preOrder(root.Right)
 	}
-	
+
 	preOrder(root)
 	log.Println(data)
 	return len(data) == 1

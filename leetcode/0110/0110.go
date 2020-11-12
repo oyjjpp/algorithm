@@ -37,17 +37,17 @@ func maxDepth(root *TreeNode) int {
 // abs
 // 求一个数的绝对值
 func abs(num int) int {
-    if num >0 {
-        return num
-    }
-    return -num
+	if num > 0 {
+		return num
+	}
+	return -num
 }
 
 func max(left, right int) int {
-    if left > right {
-        return left
-    }
-    return right
+	if left > right {
+		return left
+	}
+	return right
 }
 
 
