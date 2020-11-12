@@ -1,18 +1,18 @@
 package leetcode
 
-import(
-	"testing"
+import (
 	"log"
+	"testing"
 )
 
-func TestIsUnivalTree(t *testing.T){
+func TestIsUnivalTree(t *testing.T) {
 	data := &TreeNode{
-		Val:1,
-		Left:&TreeNode{
-			Val:1,
+		Val: 1,
+		Left: &TreeNode{
+			Val: 1,
 		},
-		Right:&TreeNode{
-			Val:2,
+		Right: &TreeNode{
+			Val: 2,
 		},
 	}
 	rs := isUnivalTree(data)
