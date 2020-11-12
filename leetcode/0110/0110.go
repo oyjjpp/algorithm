@@ -9,12 +9,13 @@ type TreeNode struct {
 // isBalanced
 // 平衡二叉树
 func isBalanced(root *TreeNode) bool {
-    if root == nil{
+    // 如果节点为nil 则为平衡二叉树
+    if root == nil {
         return true
     }
     
-    // 左右子数的告诉差
-    if abs(height(root.Left)-height(root.Right)>1) {
+    // 左右子数的深度差
+    if abs(maxDepth(root.Left)-maxDepth(root.Right)) > 1 {
         return false
     }
     
@@ -24,15 +25,13 @@ func isBalanced(root *TreeNode) bool {
     return isBalanced(root.Right)
 }
 
-// height
-// 求树的高度
-func height(root *TreeNode) int {
+// maxDepth
+// 二叉树深度
+func maxDepth(root *TreeNode) int {
     if root == nil {
         return 0
     }
-    leftH := height(root.Left)
-    rightH := height(root.Right)
-    return max(leftH, rightH) + 1
+    return max(maxDepth(root.Left), maxDepth(root.Right)) + 1
 }
 
 // abs
@@ -50,3 +49,21 @@ func max(left, right int) int {
     }
     return right
 }
+
+
+func isBalancedV2(root *TreeNode) bool {
+    return height(root) >= 0
+}
+
+func height(root *TreeNode) int {
+    if root == nil {
+        return 0
+    }
+    leftHeight := height(root.Left)
+    rightHeight := height(root.Right)
+    if leftHeight == -1 || rightHeight == -1 || abs(leftHeight - rightHeight) > 1 {
+        return -1
+    }
+    return max(leftHeight, rightHeight) + 1
+}
+
