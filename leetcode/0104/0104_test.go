@@ -18,5 +18,9 @@ func TestMaxDepth(t *testing.T) {
 		},
 	}
 	length := maxDepth(data)
-	log.Println(length)
+    if length == 3 {
+        log.Println("树的高度", length)
+    }else{
+        t.Errorf("希望结果3,实际结果%d", length)
+    }
 }
