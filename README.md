@@ -37,6 +37,10 @@ Algorithm program of record learning
 
 明确base case -> 明确【状态】 -> 明确【选择】 -> 定义DP数组/函数的含义
 
+递归算法的时间复杂度？就是用子问题个数乘以解决一个子问题需要的时间
+
+动态规划问题最困难的就是写出这个暴力解，即状态转移方程
+
 ### 参考
 
 [labuladong的算法小抄](https://labuladong.gitbook.io/algo/)

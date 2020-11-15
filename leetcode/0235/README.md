@@ -1,14 +1,18 @@
 ### 题目
+
 剑指 Offer 68 - I. 二叉搜索树的最近公共祖先  
 235. 二叉搜索树的最近公共祖先
 
 #### 题目描述
+
 给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
 
 ### 最近公共祖先
+
 对于有根树T的两个结点p、q，最近公共祖先表示为一个结点x，满足x是p、q的祖先且x的深度尽可能大（一个节点也可以是它自己的祖先）
 
 ### 思路
+
 利用了二叉搜索树的中序遍历的有序性  
 
 1.循环迭代二叉搜索树  
@@ -17,11 +21,13 @@
 4.否在当前节点位两个节点的最近共祖先  
 
 ### 代码
+
 ```golang
 
 ```
 
 ### 参考
+
 来源：力扣（LeetCode）  
-链接：https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/  
+链接：<https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/>  
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
