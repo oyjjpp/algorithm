@@ -41,6 +41,12 @@ Algorithm program of record learning
 
 动态规划问题最困难的就是写出这个暴力解，即状态转移方程
 
+要符合「最优子结构」，子问题间必须互相独立
+
+自定向下：递归
+
+自下向上：迭代
+
 ### 参考
 
 [labuladong的算法小抄](https://labuladong.gitbook.io/algo/)
