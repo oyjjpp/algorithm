@@ -12,6 +12,7 @@ type TreeNode struct {
 
 // recoverTree
 // 恢复一个二叉搜索树
+// 中序遍历
 func recoverTree(root *TreeNode) {
 	// 定义一个数组保存中序遍历结果
 	nums := []int{}
@@ -29,6 +30,7 @@ func recoverTree(root *TreeNode) {
 	// 中序遍历二叉树
 	inorder(root)
 	log.Println(nums)
+
 	// 查找交换的节点
 	x, y := findTwoSwapped(nums)
 	// TODO 如果都是-1 则代表已经是二叉搜索树 1237564
@@ -86,7 +88,7 @@ func recover(root *TreeNode, count, x, y int) {
 func recoverTreeV2(root *TreeNode) {
 	var x, y, pre *TreeNode
 
-	// 定义一个中序遍历函数，将结果保存到数组中
+	// 定义一个中序遍历函数
 	var inorder func(node *TreeNode)
 	inorder = func(node *TreeNode) {
 		if node == nil {

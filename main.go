@@ -10,11 +10,21 @@ import (
 	"runtime"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"syscall"
 )
 
 func main() {
-	waitBug()
+	var total int64
+	sum := 0
+	for i := 1; i <= 10; i++ {
+		sum += i
+		go func(i int) {
+			// 涉及到写 有竞争问题
+			atomic.AddInt64(&total, int64(i))
+		}(i)
+	}
+	// log.Printf("Total:%d sum %d", total, sum)
 }
 
 // 对共享内存保护的失误
