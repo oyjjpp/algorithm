@@ -1,5 +1,7 @@
 package leetcode
 
+import "log"
+
 // coinChange
 // 零钱兑换
 // stack overflow
@@ -92,6 +94,7 @@ func coinChangeV2(coins []int, amount int) int {
 // coinChange
 // 零钱兑换
 // 通过备DP table解决重叠子问题
+// 超出时间限制
 func coinChangeV3(coins []int, amount int) int {
 	// dp := make([]int, amount+1)
 	dp := map[int]int{}
@@ -99,18 +102,22 @@ func coinChangeV3(coins []int, amount int) int {
 	dp[0] = 0
 	number := amount + 1
 	// 外层for循环在遍历所有状态的所有取值
-	for i := 1; i < number; i++ {
+	// [2,5,10,1] 27
+	for i := 0; i < number; i++ {
 		// 内层for缓存在求所有选择的最小值
 		for _, coin := range coins {
 			// 子问题无解
 			if (i - coin) < 0 {
 				continue
 			}
-			if _, ok := dp[i-coin]; ok {
-				dp[i] = min(number, 1+dp[i-coin])
-			} else {
+			// 设置默认值
+			if _, ok := dp[i]; !ok {
 				dp[i] = number
 			}
+			if _, ok := dp[i-coin]; ok {
+				dp[i] = min(dp[i], 1+dp[i-coin])
+			}
+			log.Println(i, dp[i])
 		}
 	}
 

@@ -6,7 +6,11 @@ import (
 )
 
 func TestCoinChange(t *testing.T) {
-	rs := coinChangeV3([]int{2}, 1)
+	// [3] 2
+	// [2] 1
+	// [1,2,5] 11
+	// [2,5,10,1] 27
+	rs := coinChangeV3([]int{3}, 2)
 	log.Println(rs)
 }
 
