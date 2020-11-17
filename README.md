@@ -57,6 +57,17 @@ Algorithm program of record learning
 2、选择列表：也就是你当前可以做的选择。  
 3、结束条件：也就是到达决策树底层，无法再做选择的条件。  
 
+```框架
+for 选择 in 选择列表:
+    # 做选择
+    将该选择从选择列表移除
+    路径.add(选择)
+    backtrack(路径, 选择列表)
+    # 撤销选择
+    路径.remove(选择)
+    将该选择再加入选择列表
+```
+
 ### 参考
 
 [labuladong的算法小抄](https://labuladong.gitbook.io/algo/)
