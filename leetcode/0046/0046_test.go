@@ -12,3 +12,9 @@ func TestTwoSlice(t *testing.T){
     }
     log.Println(data, len(data))
 }
+
+func TestPermute(t *testing.T){
+    data := []int{1, 2, 3}
+    res := permute(data)
+    log.Println(res)
+}
