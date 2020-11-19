@@ -81,7 +81,7 @@ func coinChangeV2(coins []int, amount int) int {
 			num = min(num, 1+subProblem)
 		}
 
-        // 存储到备忘录中
+		// 存储到备忘录中
 		if num == maxInt {
 			data[amount] = -1
 		} else {
@@ -97,7 +97,7 @@ func coinChangeV2(coins []int, amount int) int {
 // 零钱兑换
 // 通过备DP table解决重叠子问题
 // 超出时间限制
-// 
+//
 // [3] 2
 // [2] 1
 // [1,2,5] 11
@@ -112,7 +112,7 @@ func coinChangeV3(coins []int, amount int) int {
 		// 内层for缓存在求所有选择的最小值
 		for _, coin := range coins {
 			// 子问题无解
-            subProblem := i - coin 
+			subProblem := i - coin
 			if subProblem < 0 {
 				continue
 			}
@@ -120,14 +120,14 @@ func coinChangeV3(coins []int, amount int) int {
 			if _, ok := dp[i]; !ok {
 				dp[i] = number
 			}
-            // 求最小的
+			// 求最小的
 			if _, ok := dp[subProblem]; ok {
 				dp[i] = min(dp[i], 1+dp[subProblem])
 			}
 			log.Println(i, dp[i])
 		}
 	}
-    
+
 	if rs, ok := dp[amount]; !ok || rs == number {
 		return -1
 	} else {
