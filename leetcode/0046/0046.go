@@ -35,14 +35,13 @@ func permute(nums []int) [][]int {
 			if is, ok := visited[n]; ok && is {
 				continue
 			}
+
 			// 选择列表中选取一个元素放入路径中
 			path = append(path, n)
 			visited[n] = true
 			dfs(path)
 			log.Println(n)
-			// 循环1 跳走 path = [1]
-			// 循环2 跳走 path = [1, 2]
-			// 循环3 跳走 path [1,2,3]
+
 			// 将该选择从路径中移除
 			path = path[:len(path)-1]
 			visited[n] = false
