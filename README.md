@@ -67,6 +67,8 @@ for 选择 in 选择列表:
     将该选择再加入选择列表
 ```
 
+别把别人不当人，别把自己太当人
+
 ### 参考
 
 [labuladong的算法小抄](https://labuladong.gitbook.io/algo/)
