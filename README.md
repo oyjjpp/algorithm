@@ -45,7 +45,6 @@ Algorithm program of record learning
 
 自顶向下：递归
 
-
 自下向上：迭代(DP table)  
 从最小状态列举到最终状态值
 

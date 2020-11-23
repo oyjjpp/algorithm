@@ -47,7 +47,6 @@ func permute(nums []int) [][]int {
 			visited[n] = false
 		}
 	}
-
 	dfs([]int{})
 	return res
 }
