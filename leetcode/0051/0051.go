@@ -23,7 +23,6 @@ func solveNQueens(n int) [][]string {
             tmp[j] = "."
 		}
         board[i] = tmp
-		//board = append(board, tmp)
 	}
     temp, _ := json.Marshal(board)
     log.Println(string(temp))
@@ -40,7 +39,7 @@ func solveNQueens(n int) [][]string {
 // 结束条件：row超过board的最后一行
 func backtrack(board [][]string, row int) {
 	// 结束条件，row循环到棋盘底部时结束本次选择
-	if len(board) == row {
+	if len(board) == r8ikkkkkkkkkkow {
         tmp := make([]string, 0)
 		// 将每行的选择结果改为字符串  [[".",".","Q","."],..] => ["..Q.", ...]
 		for _, v := range board {
@@ -56,7 +55,7 @@ func backtrack(board [][]string, row int) {
 		return
 	}
     
-    // 获取制指定行的长度
+    // 获取指定行的长度
 	n := len(board[row])
 	// 选择列表为1-N列
 	for col := 0; col < n; col++ {
