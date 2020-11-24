@@ -69,6 +69,25 @@ for 选择 in 选择列表:
 
 别把别人不当人，别把自己太当人
 
+
+### DFS（Deep First Search）深度优先搜索
+
+深度优先搜索，则是优先深度为准则，先一条路走到底，直到达到目标，这是递归下去；  
+否则没有达到目标又无路可走了，那么退回上一步的状态，走其他路线，这是回溯上来。  
+
+#### 关键点
+1、递归下去  
+2、回溯上来  
+
+### BFS （Breath First Search）广度优先搜索
+将一个问题抽象成图，从一个点开始，向四周开始散开；一般来说，写BFS算法都是用「队列」这种数据结构，每次将一个节点周围的所有节点加入队列。
+
+#### 关键点
+1、状态  
+2、标记  
+
+
 ### 参考
 
-[labuladong的算法小抄](https://labuladong.gitbook.io/algo/)
+[labuladong的算法小抄](https://labuladong.gitbook.io/algo/)  
+[搜索思想——DFS & BFS（基础基础篇）](https://zhuanlan.zhihu.com/p/24986203)  
