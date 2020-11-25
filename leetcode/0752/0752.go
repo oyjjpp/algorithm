@@ -33,12 +33,14 @@ func openLock(deadends []string, target string) int {
             if _, ok := visited[up];!ok{
                 queue = append(queue, up)
                 count = append(count, number+1)
+                visited[up] = true
             }
             
             down := minusOne(cur, j)
             if _, ok := visited[down]; !ok{
                 queue = append(queue, down)
                 count = append(count, number+1)
+                visited[down] = true
             }
         }
     }
@@ -66,10 +68,10 @@ func openLockBFS(target string) int {
         // 将一个节点的相邻节点加入队列
         for j:=0; j<4; j++{
             up := plusOne(cur, j)
-            down := minusOne(cur, j)
-            
             queue = append(queue, up)
             count = append(count, number+1)
+            
+            down := minusOne(cur, j)
             queue = append(queue, down)
             count = append(count, number+1)
         }
