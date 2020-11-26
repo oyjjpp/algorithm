@@ -86,6 +86,31 @@ for 选择 in 选择列表:
 1、状态  
 2、标记  
 
+### 二分法查找
+主要细节点边界  
+1、到底要给mid加一还是减一  
+2、while到底用<=还是<  
+
+#### 二分法查找框架
+```golang
+binarySearch(int[] nums, target int) int {
+    leff, right = 0, ...;
+
+    for ... {
+        mid := left + (right - left) / 2;
+        if nums[mid] == target {
+            ...
+        } else if nums[mid] < target {
+            left = ...
+        } else if nums[mid] > target {
+            right = ...
+        }
+    }
+    return ...;
+}
+```
+
+计算mid := left + (right-left) / 2；是为防止left+right相加溢出  
 
 ### 参考
 
