@@ -19,16 +19,21 @@ func minWindow(s string, t string) string {
 	left, right := 0, 0
 
 	// 表示窗口中满足need条件的字符个数
-	// 如果valid和len(need)的大小相同，则说明窗口已满足条件，已经完全覆盖了串T
+	// 如果valid和len(need)的大小相同，则说明窗口已满足条件，已经完全覆盖了字符串t
 	valid := 0
 
-	// @TODO 记录最小覆盖子串的起始索引及长度
+	// @TODO 记录最小覆盖子串的起始索引及长度，计算最终结果使用
 	start, length := 0, maxNum
 	log.Println(right, left, start, length)
+    
+    // 结束条件：right到达s的尽头
 	for right < len(s) {
+        // 即将移入窗口的值
 		cur := s[right]
-
+        right++
+        
 		// 进行窗口数据更新
+        // 首先校验是否在T串
 		if _, ok := need[cur]; ok {
 			window[cur]++
 
@@ -38,9 +43,9 @@ func minWindow(s string, t string) string {
 			}
 		}
 
-		// 判断窗口是否需要收缩
+		// 判断窗口是否需要收缩：valid==len(need)代表当前窗口已经满足need
 		for valid == len(need) {
-			// 在这里更新最小覆盖子串
+			// 在这里更新最小覆盖子串：最终结果产生位置
 			if (right - left) < length {
 				start = left
 				length = right - left
@@ -50,6 +55,7 @@ func minWindow(s string, t string) string {
 			delS := s[left]
 			left++
 			if _, ok := need[delS]; ok {
+                // 既要移除窗口的值，也要移除验证的值
 				if window[delS] == need[delS] {
 					valid--
 				}
@@ -61,6 +67,7 @@ func minWindow(s string, t string) string {
 	if length == maxNum {
 		return ""
 	} else {
-		return s[start:length]
+        log.Println(start, length)
+		return s[start:start+length]
 	}
 }

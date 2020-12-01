@@ -122,13 +122,22 @@ binarySearch(int[] nums, target int) int {
 
 ### 滑动窗口框架
 
+#### 难点
+1、如何向窗口中添加新元素  
+2、如何缩小窗口  
+3、在滑动窗口的哪个阶段更新结果  
+
+#### 框架
 ```框架
 /* 滑动窗口算法框架 */
 void slidingWindow(string s, string t) {
     unordered_map<char, int> need, window;
+    // 初始化字串所有元素的个数
     for (char c : t) need[c]++;
 
+	// 初始化左右指针
     int left = 0, right = 0;
+    // 有效性的个数
     int valid = 0;
     while (right < s.size()) {
         // c 是将移入窗口的字符
