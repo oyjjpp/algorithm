@@ -19,7 +19,7 @@ func searchRange(nums []int, target int) []int {
 			right = mid
 		}
 	}
-	// 左侧边际
+	// 左侧边界
 	if left == len(nums) || nums[left] != target {
 		return []int{-1, -1}
 	}
@@ -73,7 +73,7 @@ func rightSrache(nums []int, target int) int {
 			left = mid + 1
 		} else if nums[mid] > target {
 			right = mid - 1
-		}else if nums[mid] = target{
+		}else if nums[mid] == target{
 			left = mid+1
 		}
 	}
