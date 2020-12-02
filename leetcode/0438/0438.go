@@ -7,7 +7,7 @@ func findAnagrams(s, p string) []int {
 	window := map[byte]int{}
 	need := map[byte]int{}
 	for i := 0; i < len(p); i++ {
-		cur := s1[i]
+		cur := p[i]
 		need[cur]++
 	}
 	// 初始化窗口的两端，区间[left, right)
@@ -16,6 +16,9 @@ func findAnagrams(s, p string) []int {
 	// 表示窗口中满足need条件的字符个数
 	// 如果valid和len(need)的大小相同，则说明窗口已满足条件，已经完全覆盖了字符串t
 	valid := 0
+    
+    // 保存结果
+    data := []int{}
     
     // 结束条件：存在满足条件的节点即可
 	for right < len(s) {
@@ -34,11 +37,11 @@ func findAnagrams(s, p string) []int {
 			}
 		}
 
-		// 判断窗口是否需要收缩：窗口大小大于len(need)时，应为排列嘛，显然长度应该是一样的。
+		// 判断窗口是否需要收缩：窗口大小大于len(need)时，应为排列，显然长度应该是一样的。
 		for (right - left) >= len(p) {
-            // 结束条件：在这里判断是否找到了合法的子串
+            // 结束条件：在这里判断是否找到了合法的子串,如果合法则将左指针存入结果中
             if valid == len(need){
-                return true
+                data = append(data, left)
             }
             
 			// 将移出窗口的字符
@@ -53,5 +56,5 @@ func findAnagrams(s, p string) []int {
 			}
 		}
 	}
-    return false
+    return data
 }

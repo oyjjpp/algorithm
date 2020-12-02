@@ -34,7 +34,7 @@ func checkInclusion(s1, s2 string) bool {
 			}
 		}
 
-		// 判断窗口是否需要收缩：窗口大小大于len(need)时，应为排列嘛，显然长度应该是一样的。
+		// 判断窗口是否需要收缩：窗口大小大于len(need)时，应为排列，显然长度应该是一样的。
 		for (right - left) >= len(s1) {
             // 结束条件：在这里判断是否找到了合法的子串
             if valid == len(need){
