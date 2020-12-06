@@ -17,9 +17,11 @@ func generate(numRows int) [][]int {
 	for i := 0; i < numRows; i++ {
 		for j := 0; j < numRows; j++ {
 			if j == i {
+                // 对角线位置
 				res[i][j] = 1
 				break
 			} else if j == 0 {
+                // 第一列
 				res[i][j] = 1
 			} else if i > 0 && j > 0 {
 				res[i][j] = res[i-1][j] + res[i-1][j-1]
