@@ -7,6 +7,7 @@ import (
 
 // findMaxLengthOfLIS
 // 最长递增子序列
+// 使用DP Table
 func findMaxLengthOfLIS(nums []int) int {
 	if len(nums) == 0 {
 		return 0
@@ -36,6 +37,39 @@ func max(a, b int) int {
 		return a
 	}
 	return b
+}
+
+// findMaxLengthOfLISV2
+// 使用二分法
+func findMaxLengthOfLISV2(nums []int) int{
+    top := make([]int, len(nums))
+    // 牌堆数初始化为0
+    piles := 0
+    
+    for i:=0 ; i< len(nums); i++{
+        // 要处理的扑克牌
+        poker := nums[i]
+        
+        // 搜索左侧边界的二分搜索
+        left, right := 0, piles
+        for left < right {
+            mid := (left + right)/2
+            if top[mid] > poker {
+                right = mid
+            }else if top[mid] < poker {
+                left = mid + 1
+            } else {
+                right = mid
+            }
+        }
+        // 没有找到合适的牌堆，新建一堆
+        if left == piles {
+            piles++
+        }
+        top[left] = poker
+    }
+    // 牌堆树就是LIS长度
+    return piles
 }
 
 // findNumberOfLIS
