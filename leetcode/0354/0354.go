@@ -1,34 +1,34 @@
 package leetcode
 
-import(
-    "sort"
-    "log"
+import (
+	"log"
+	"sort"
 )
 
 // maxEnvelopes
 // 俄罗斯套娃信封问题
 func maxEnvelopes(envelopes [][]int) int {
-    if len(envelopes)==0 || envelopes==nil {
-        return 0    
-    }
-    
-    // 对二维数组进行排序
-    content := envelopesData{envelopes}
-    sort.Sort(content)
-    
-    // 对高度数组寻找LIS
-    height := make([]int, len(envelopes))
-    for i:=0; i< len(envelopes); i++ {
-        height[i] = content.data[i][1]
-    }
-    log.Println(height)
-    
-    return findMaxLengthOfLIS(height)
+	if len(envelopes) == 0 || envelopes == nil {
+		return 0
+	}
+
+	// 对二维数组进行排序
+	content := envelopesData{envelopes}
+	sort.Sort(content)
+
+	// 对高度数组寻找LIS
+	height := make([]int, len(envelopes))
+	for i := 0; i < len(envelopes); i++ {
+		height[i] = content.data[i][1]
+	}
+	log.Println(height)
+
+	return findMaxLengthOfLIS(height)
 }
 
 type envelopesData struct {
-    data [][]int
-} 
+	data [][]int
+}
 
 // Len
 // 方法返回集合中的元素个数
@@ -39,17 +39,17 @@ func (p envelopesData) Len() int {
 // Less
 // 方法报告索引i的元素是否比索引j的元素小
 func (p envelopesData) Less(i, j int) bool {
-    arr1 := p.data[i]
-    arr2 := p.data[j]
+	arr1 := p.data[i]
+	arr2 := p.data[j]
 
-    if arr1[0] < arr2[0]{
-        return true
-    } else if arr1[0] == arr2[0] {
-        if arr1[1]>arr2[1]{
-            return true
-        }
-    }
-    return false
+	if arr1[0] < arr2[0] {
+		return true
+	} else if arr1[0] == arr2[0] {
+		if arr1[1] > arr2[1] {
+			return true
+		}
+	}
+	return false
 }
 
 // Swap
@@ -85,9 +85,9 @@ func findMaxLengthOfLIS(nums []int) int {
 	return dp[len(dp)-1]
 }
 
-func max(a, b int) int{
-    if a > b {
-        return a
-    }
-    return b
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }

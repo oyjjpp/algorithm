@@ -1,7 +1,9 @@
 ### 题目
+
 1143. 最长公共子序列
 
 ### 题目描述
+
 给定两个字符串 text1 和 text2，返回这两个字符串的最长公共子序列的长度。
 
 一个字符串的子序列是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。
@@ -11,21 +13,24 @@
 
 ### 案例
 
-####示例 1:
+#### 示例 1
+
 ```golang
 输入：text1 = "abcde", text2 = "ace" 
 输出：3  
 解释：最长公共子序列是 "ace"，它的长度为 3。
 ```
 
-#### 示例 2:
+#### 示例 2
+
 ```golang
 输入：text1 = "abc", text2 = "abc"
 输出：3
 解释：最长公共子序列是 "abc"，它的长度为 3。
 ```
 
-#### 示例 3:
+#### 示例 3
+
 ```golang
 输入：text1 = "abc", text2 = "def"
 输出：0
@@ -33,21 +38,23 @@
 ```
 
 ### 思路
+
 求最值的问题，都会想到动态规划问题，这里我们直接找动态规划的三要素  
 Dp tabel含义：对于dp[i][j]的含义,对于text1[0...i-1]和text2[0...j-1]最长公共子序列是dp[i][j]
 base case:  索引为0列和行表示空串，即dp[...][0]和dp[0][...]都表示0  
 状态转移方程：  
+
 ```golang
 if text1[i] == text2[j] {
-	dp[i][j] = dp[i-1, j-1] + 1
+ dp[i][j] = dp[i-1, j-1] + 1
 }
 if text1[i] != text2[j] {
-	dp[i][j] = max(dp[i-1, j], dp[i, j-1])
+ dp[i][j] = max(dp[i-1, j], dp[i, j-1])
 }
 ```
 
-
 ### 参考
+
 来源：力扣（LeetCode）  
-链接：https://leetcode-cn.com/problems/longest-common-subsequence  
+链接：<https://leetcode-cn.com/problems/longest-common-subsequence>  
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。  
