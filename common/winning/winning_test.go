@@ -11,3 +11,13 @@ func TestProbability(t *testing.T){
         t.Log(rs)
     }
 }
+
+func TestRoll(t *testing.T)(){
+    num := 0
+    for i := 0; i< 10000; i++{
+        if rs := roolV2(0.1, 10); rs {
+            num++
+        }
+    }
+    t.Log(num)
+}

@@ -21,3 +21,5 @@
 ### 参考
 [抽奖算法-指定概率的随机](https://www.cnblogs.com/HQFZ/p/5945219.html)  
 [加权随机算法](https://www.cnblogs.com/UnGeek/p/5917995.html)  
+[不同概率模型的抽奖体验 ](https://blog.mutoo.im/2015/03/experience-of-different-probability-models/)  
+[幸运大转盘抽奖 抽奖算法 程序实现逻辑](https://www.cnblogs.com/qianxunclub/p/9145716.html)
