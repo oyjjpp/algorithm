@@ -49,12 +49,16 @@ func Rand(min, max int) int {
 }
 
 // 方法二
+// 优化思路：减少内存的消耗
+// 使用权重之和计算处一个随机数
+// 
 func randomPobabilityV2(config string) string{
     var data map[string]int
     if err := json.Unmarshal([]byte(config), &data);err != nil{
         // 异常
         return ""
     }
+    // 计算当前权重总和，求出一个随机数
     sum := 0
     for _, widght := range data {
         sum = sum + widght
