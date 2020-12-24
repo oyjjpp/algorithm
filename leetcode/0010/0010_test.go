@@ -6,14 +6,17 @@ import (
 )
 
 func TestIsMatch(t *testing.T){
-    rs := false 
-    rs=isMatch("aa", "a")
+    // "aa" "a" false
+    // "aab" "c*a*b" true
+    rs := isMatch("aab", "c*a*b")
     t.Log(rs)
 }
 
 func TestStringPtr(t *testing.T){
     str := "this is a message"
     m := &str
+    
     t.Log(reflect.ValueOf(m).Kind())
-    t.Log(*m[1])
+    t.Log(reflect.ValueOf(*m).Kind())
+    t.Log((*m)[1])
 }
