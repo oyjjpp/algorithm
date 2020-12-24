@@ -1,11 +1,11 @@
 package leetcode
 
 import (
-    "testing"
+	"testing"
 )
 
-func TestMinInsertions(t *testing.T){
-    data := "leetcode"
-    rs := minInsertions(data)
-    t.Log(rs)
+func TestMinInsertions(t *testing.T) {
+	data := "leetcode"
+	rs := minInsertions(data)
+	t.Log(rs)
 }
