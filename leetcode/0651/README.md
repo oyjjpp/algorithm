@@ -15,6 +15,7 @@ Ctrl-V键：将缓冲区的内容输出到光标所在的屏幕位置
 ### 案例
 
 #### 示例1
+
 ```golang
 输入：3
 输出：3
@@ -22,6 +23,7 @@ Ctrl-V键：将缓冲区的内容输出到光标所在的屏幕位置
 ```
 
 #### 示例2
+
 ```golang
 输入：7
 输出：9
@@ -35,10 +37,9 @@ Ctrl-V键：将缓冲区的内容输出到光标所在的屏幕位置
 >屏幕上A的数量sumA  
 >缓冲区有多少cacheA
 
-base case：N=0 
+base case：N=0
 
 状态转移：  
 按下A：dp(N-1, sumA+1, cacheA)  
 按下Ctrl+V：dp(N-1, sumA+cacheA, cacheA)
 按下Ctrl+A，Ctrl+C：dp(N-2, sumA, sumA)  
-

@@ -1,10 +1,10 @@
 package leetcode
 
 import (
-    "testing"
+	"testing"
 )
 
-func TestMaxA(t *testing.T){
-    rs := maxA(3)
-    t.Log(rs)
+func TestMaxA(t *testing.T) {
+	rs := maxA(7)
+	t.Log(rs)
 }
