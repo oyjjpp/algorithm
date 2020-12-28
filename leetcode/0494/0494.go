@@ -45,7 +45,7 @@ func findTargetSumWaysV2(nums []int, S int) int {
 
 	var dp func(nums []int, i, rest int) int
 	// backtrack
-	// 回溯算法
+	// 动态规划
 	// @param nums 所提供得数组
 	// @param i 当前索引
 	// @param rest taget 剩余的值
