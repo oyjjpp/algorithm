@@ -1,8 +1,8 @@
 package leetcode
 
 import (
-    "log"
-    "encoding/json"
+	"encoding/json"
+	"log"
 )
 
 // 定义全局结果数组
@@ -20,12 +20,12 @@ func solveNQueens(n int) [][]string {
 	for i := 0; i < n; i++ {
 		tmp := make([]string, n, n)
 		for j := 0; j < n; j++ {
-            tmp[j] = "."
+			tmp[j] = "."
 		}
-        board[i] = tmp
+		board[i] = tmp
 	}
-    temp, _ := json.Marshal(board)
-    log.Println(string(temp))
+	temp, _ := json.Marshal(board)
+	log.Println(string(temp))
 	// 递归选择，从第一行选择到第N行回溯
 	backtrack(board, 0)
 
@@ -39,8 +39,8 @@ func solveNQueens(n int) [][]string {
 // 结束条件：row超过board的最后一行
 func backtrack(board [][]string, row int) {
 	// 结束条件，row循环到棋盘底部时结束本次选择
-	if len(board) == r8ikkkkkkkkkkow {
-        tmp := make([]string, 0)
+	if len(board) == row {
+		tmp := make([]string, 0)
 		// 将每行的选择结果改为字符串  [[".",".","Q","."],..] => ["..Q.", ...]
 		for _, v := range board {
 			str := ""
@@ -50,12 +50,12 @@ func backtrack(board [][]string, row int) {
 			tmp = append(tmp, str)
 		}
 		// 将结果push到选择结果集中
-        // 存储多种解决方案
+		// 存储多种解决方案
 		result = append(result, tmp)
 		return
 	}
-    
-    // 获取指定行的长度
+
+	// 获取指定行的长度
 	n := len(board[row])
 	// 选择列表为1-N列
 	for col := 0; col < n; col++ {
@@ -82,21 +82,21 @@ func isValid(board [][]string, row, col int) bool {
 	// 检查列是否有皇后互相冲突
 	for i := 0; i < n; i++ {
 		if board[i][col] == "Q" {
-            log.Println("列冲突", row, col)
+			log.Println("列冲突", row, col)
 			return false
 		}
 	}
 	// 检查右上方是否有皇后互相冲突
 	for i, j := row-1, col+1; i >= 0 && j < n; i, j = i-1, j+1 {
 		if board[i][j] == "Q" {
-            log.Println("右上方", row, col)
+			log.Println("右上方", row, col)
 			return false
 		}
 	}
 	// 检查左上方是否有皇后互相冲突
 	for i, j := row-1, col-1; i >= 0 && j >= 0; i, j = i-1, j-1 {
 		if board[i][j] == "Q" {
-            log.Println("左上方", row, col)
+			log.Println("左上方", row, col)
 			return false
 		}
 	}
