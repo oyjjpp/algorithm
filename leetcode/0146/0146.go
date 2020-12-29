@@ -37,22 +37,13 @@ func InitDoubleList() *DoubleList {
 // AddLast
 // 在链表尾部添加节点x，时间复杂度O(1)
 func (list *DoubleList) AddLast(x *Node) {
+
 	x.prev = list.tail.prev
 	x.next = list.tail
 
-	list.tail.prev = x
+	list.tail.prev.next = x
 	list.tail.prev = x
 	list.size++
-
-	// TODO
-	log.Println("x节点:", x.key, x.val)
-	list.printList()
-}
-
-// printList
-// 打印当前节点
-func (list *DoubleList) printList() {
-	log.Println("打印节点", list, list.head.next)
 }
 
 // Remove
@@ -162,17 +153,19 @@ func (this *LRUCache) Put(key int, value int) {
 		this.deleteKey(key)
 		// 新插入的数据为最近使用的数据
 		this.addRecently(key, value)
+		return
 	}
 
-	log.Println("add eme", key, value, this.cap, this.cache.Size())
 	if this.cap == this.cache.Size() {
 		// 删除最近未使用的元素
 		this.removeLeastRecently()
-		// TODO
-		log.Println("add eme", key, value, this.cap, this.cache.Size())
-		test, _ := json.Marshal(this.hashMap)
-		log.Println(string(test))
 	}
 	// 添加为最近使用的元素
 	this.addRecently(key, value)
+}
+
+func (this *LRUCache) Println() {
+	if rs, err := json.Marshal(this.hashMap); err == nil {
+		log.Println(string(rs))
+	}
 }
