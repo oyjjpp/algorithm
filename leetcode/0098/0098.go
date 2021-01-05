@@ -10,10 +10,13 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
+// isValidBST
+// 是否有有效二叉树
 func isValidBST(root *TreeNode) bool {
 	var pre *TreeNode
 	isValid := true
 
+	// 通过中序遍历的有序性，校验是否为有效二叉树
 	var inorder func(root *TreeNode)
 	inorder = func(root *TreeNode) {
 		if root == nil {
