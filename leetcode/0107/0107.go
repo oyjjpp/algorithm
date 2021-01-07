@@ -1,5 +1,7 @@
 package leetcode
 
+import "log"
+
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
@@ -18,4 +20,6 @@ func levelOrderBottom(root *TreeNode) [][]int {
 			Right: &TreeNode{Val: 7},
 		},
 	}
+	log.Println(data)
+	return nil
 }

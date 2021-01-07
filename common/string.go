@@ -89,9 +89,9 @@ func FindWords(board [][]byte, words []string) []string {
 	return []string{}
 }
 
-// isPalindrome
+// isPalindromeStr
 // 验证是否是有效回文字符串
-func isPalindrome(s string) bool {
+func isPalindromeStr(s string) bool {
 	// 判断是否合法的字符
 	isValid := func(v rune) bool {
 		return unicode.IsDigit(v) || unicode.IsLetter(v)

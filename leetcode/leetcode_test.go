@@ -6,31 +6,6 @@ import (
 	"time"
 )
 
-func TestAddTwoNumbers(t *testing.T) {
-	l1 := &ListNode{
-		Val: 2,
-		Next: &ListNode{
-			Val: 4,
-			Next: &ListNode{
-				Val:  3,
-				Next: nil,
-			},
-		},
-	}
-	l2 := &ListNode{
-		Val: 5,
-		Next: &ListNode{
-			Val: 6,
-			Next: &ListNode{
-				Val:  4,
-				Next: nil,
-			},
-		},
-	}
-	sumNode := addTwoNumbersV2(l1, l2)
-	show(sumNode)
-}
-
 func TestDiv(t *testing.T) {
 	curTime := Time() - 398
 	rs := FormatTime(curTime)
@@ -78,23 +53,6 @@ func Date(format string, timestamp int64) string {
 func Time() int64 {
 	timeLoc, _ := time.LoadLocation("Asia/Shanghai")
 	return time.Now().In(timeLoc).Unix()
-}
-
-func TestLengthOfLongestSubstring(t *testing.T) {
-	param := map[string]int{
-		"abcabcbb": 3,
-		"bbbbb":    1,
-		"pwwkew":   3,
-		"dedf":     3,
-		" ":        1,
-	}
-	for k, v := range param {
-		rs := lengthOfLongestSubstring(k)
-
-		if rs != v {
-			t.Errorf("expect %d, result %d\n", v, rs)
-		}
-	}
 }
 
 func TestFindMedianSortedArrays(t *testing.T) {
