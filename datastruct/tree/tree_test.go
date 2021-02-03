@@ -124,3 +124,22 @@ func TestInsertIntoBST(t *testing.T) {
 	rs1 := insertIntoBST(data1, 10)
 	printlnTree(rs1)
 }
+
+func TestInvertBT(t *testing.T) {
+	data := &Node{
+		val: 4,
+		left: &Node{
+			val:   2,
+			left:  &Node{val: 1},
+			right: &Node{val: 3},
+		},
+		right: &Node{
+			val:   7,
+			left:  &Node{val: 6},
+			right: &Node{val: 9},
+		},
+	}
+
+	rs := invertBT(data)
+	printlnTree(rs)
+}

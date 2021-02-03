@@ -39,3 +39,19 @@ func isSameThee(root1, root2 *Node) bool {
 	}
 	return isSameThee(root1.left, root2.left) && isSameThee(root1.right, root2.right)
 }
+
+// invertBT
+// 通过递归方式翻转一颗二叉树
+func invertBT(root *Node) *Node {
+	if root == nil {
+		return root
+	}
+
+	// 交换左右孩子节点
+	root.left, root.right = root.right, root.left
+
+	// 递归处理左右子树
+	invertBT(root.left)
+	invertBT(root.right)
+	return root
+}
