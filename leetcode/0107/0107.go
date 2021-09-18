@@ -1,6 +1,8 @@
 package leetcode
 
-import "log"
+import (
+	"log"
+)
 
 type TreeNode struct {
 	Val   int

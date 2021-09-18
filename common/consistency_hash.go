@@ -36,12 +36,9 @@ func (hr HashRing) Swap(i, j int) {
 
 // 定义节点
 type Node struct {
-	//节点索引
-	Id int
-	//节点信息
-	Info string
-	//节点权重 @TODO 只能增大范围
-	Weight int
+	Id     int    // 节点索引
+	Info   string // 节点信息
+	Weight int    // 节点权重 @TODO 只能增大范围
 }
 
 // NewNode
@@ -56,14 +53,10 @@ func NewNode(id int, ip_port string, weight int) *Node {
 
 // 一致性哈希结构
 type Consistent struct {
-	// 记录节点对应的位置
-	Nodes map[uint32]Node
-	// 每个结点循环的次数
-	numReps int
-	// 节点是否添加
-	Resources map[int]bool
-	// hash环
-	ring HashRing
+	Nodes     map[uint32]Node // 记录节点对应的位置
+	numReps   int             // 每个结点循环的次数
+	Resources map[int]bool    // 节点是否添加
+	ring      HashRing        // hash环
 	sync.RWMutex
 }
 

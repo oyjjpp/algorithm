@@ -11,6 +11,7 @@ type TreeNode struct {
 // @param preorder 前序遍历参数  中左右
 // @param inorder 中序遍历参数	左中右
 func buildTree(preorder []int, inorder []int) *TreeNode {
+	// 节点为0
 	if len(preorder) == 0 {
 		return nil
 	}
@@ -28,8 +29,10 @@ func buildTree(preorder []int, inorder []int) *TreeNode {
 	// 递归构建左右子树
 	// 参数为左子数的前序遍历，中序遍历
 	// 前序遍历的左子树需要通过中序遍历计算出的长度确定
-	root.Left = buildTree(preorder[1:len(inorder[:i])+1], inorder[:i])
+	index := len(inorder[:i]) + 1
+	root.Left = buildTree(preorder[1:index], inorder[:i])
+
 	// 参数为右子数的前序遍历，中序遍历
-	root.Right = buildTree(preorder[len(inorder[:i])+1:], inorder[i+1:])
+	root.Right = buildTree(preorder[index:], inorder[i+1:])
 	return root
 }

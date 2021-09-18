@@ -63,9 +63,11 @@ func coinChangeV2(coins []int, amount int) int {
 		if _, ok := data[amount]; ok {
 			return data[amount]
 		}
+
 		if amount == 0 {
 			return 0
 		}
+		// 挑选的零钱不符合
 		if amount < 0 {
 			return -1
 		}
