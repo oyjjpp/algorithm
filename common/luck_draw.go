@@ -1,11 +1,10 @@
-package main
+package common
 
 import (
 	"crypto/rand"
 	"fmt"
 	"math/big"
 	"strings"
-	"sync"
 
 	"github.com/spf13/cast"
 )
@@ -13,52 +12,6 @@ import (
 type Gift struct {
 	Name        string `json:"name"`
 	Probability int    `json:"probability"`
-}
-
-func main() {
-	gifts := []Gift{
-		{
-			Name:        "mac",
-			Probability: 1,
-		},
-		{
-			Name:        "phone",
-			Probability: 19,
-		},
-		{
-			Name:        "优惠券",
-			Probability: 80,
-		},
-	}
-	var wg sync.WaitGroup
-	var lock sync.Mutex
-	one, two, three, four := 0, 0, 0, 0
-	for i := 0; i < 1000000; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			res := aliasMethod(gifts)
-			if res == 0 {
-				lock.Lock()
-				one++
-				lock.Unlock()
-			} else if res == 1 {
-				lock.Lock()
-				two++
-				lock.Unlock()
-			} else if res == 2 {
-				lock.Lock()
-				three++
-				lock.Unlock()
-			} else {
-				lock.Lock()
-				four++
-				lock.Unlock()
-			}
-		}()
-	}
-	wg.Wait()
-	fmt.Printf("one:%v two:%v three:%v four:%v", one, two, three, four)
 }
 
 // 构造容量为100的容器
@@ -94,12 +47,12 @@ func dispersed(gifts []Gift) int {
 	// 获取[1,0) 随机数
 	result, _ := rand.Int(rand.Reader, big.NewInt(100))
 	index := result.Int64()
-	res := binarySearch(data, int(index))
+	res := binarySearchV3(data, int(index))
 	return res
 }
 
 // 二分法下界（重复元素 第一个元素）
-func binarySearch(data []int, target int) int {
+func binarySearchV3(data []int, target int) int {
 	left, right := 0, len(data)
 
 	for left <= right {
@@ -124,13 +77,12 @@ func binarySearch(data []int, target int) int {
 // 别名算法
 func aliasMethod(gifts []Gift) int {
 	// pdf := []float64{0.1, 0.2, 0.3, 0.4}
-	pdf := []float64{0.8, 0.1, 0.1}
+	// pdf := []float64{0.8, 0.1, 0.1}
+	pdf := make([]float64, len(gifts))
+	for index, value := range gifts {
+		pdf[index] = float64(value.Probability) / 100
+	}
 
-	res := _init(pdf)
-	return res
-}
-
-func _init(pdf []float64) int {
 	lenth := len(pdf)
 
 	// 原始数据
@@ -151,13 +103,6 @@ func _init(pdf []float64) int {
 			large = append(large, i)
 		}
 	}
-
-	// fmt.Printf("pdf%v \n", pdf)
-	// fmt.Printf("small%v \n", small)
-	// fmt.Printf("large%v \n", large)
-	// pdf[0.4 0.8 1.2 1.6]
-	// small[0 1]
-	// large[2 3]
 
 	// 构造所有矩形概率值都等于1
 	for len(small) != 0 && len(large) != 0 {
@@ -195,13 +140,8 @@ func _init(pdf []float64) int {
 	column := result.Int64()
 
 	// 获取一个随机小数
-	// var maxNumber int64 = 1<<31 - 1
 	randData, _ := rand.Int(rand.Reader, big.NewInt(100))
 	randomNumber := float64(randData.Int64()) / 100
-
-	// fmt.Printf("probInfo:%v \n", probInfo)
-	// fmt.Printf("alias:%v \n", alias)
-	// fmt.Printf("randomNumber:%v \n", randomNumber)
 
 	if randomNumber < probInfo[column] {
 		return int(column)
