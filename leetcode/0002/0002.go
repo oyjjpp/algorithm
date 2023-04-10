@@ -34,7 +34,7 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 			node2 = node2.Next
 		}
 		total := num1 + num2 + sum
-		sum = total / 10
+		sum = total / 10 // 可以不需要乘除 只要大于十
 		total = total % 10
 		log.Println("total", total)
 
