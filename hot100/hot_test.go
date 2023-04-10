@@ -26,3 +26,16 @@ func TestAddTwoNumbers(t *testing.T) {
 	sumNode := addTwoNumbers(l1, l2)
 	scanList(sumNode)
 }
+
+func TestLengthOfLongestSubstring(t *testing.T) {
+	s := "abcabcbb"
+	rs := lengthOfLongestSubstring(s)
+	t.Log(rs)
+}
+
+func TestFindMedianSortedArrays(t *testing.T) {
+	nums1 := []int{1, 2}
+	nums2 := []int{3, 4}
+	rs := findMedianSortedArrays(nums1, nums2)
+	t.Log(rs)
+}
