@@ -39,3 +39,37 @@ func TestFindMedianSortedArrays(t *testing.T) {
 	rs := findMedianSortedArrays(nums1, nums2)
 	t.Log(rs)
 }
+
+func TestFibV(t *testing.T) {
+	rs := fibV(4)
+	t.Log(rs)
+}
+
+func TestFibV2(t *testing.T) {
+	rs := fibV2(4)
+	t.Log(rs)
+}
+
+func TestCoinChange(t *testing.T) {
+	coins := []int{1}
+	amount := 10000
+	rs := coinChange(coins, amount)
+	t.Log(rs)
+}
+
+func TestCoinChangeV(t *testing.T) {
+	coins := []int{1, 2, 5}
+	amount := 11
+	rs := coinChangeV(coins, amount)
+	t.Log(rs)
+}
+
+func TestMaxPathSum(t *testing.T) {
+	data := &TreeNode{
+		Val: -3,
+		// Left: &TreeNode{Val: -1},
+		// Right: &TreeNode{Val: 3},
+	}
+	rs := maxPathSum(data)
+	t.Log(rs)
+}

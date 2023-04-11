@@ -248,3 +248,77 @@ func minWindow(s string, t string) string {
 
 	return s[start : start+length]
 }
+
+// 105. 从前序与中序遍历序列构造二叉树
+func buildTree(preorder []int, inorder []int) *TreeNode {
+	// 节点为0
+	if len(preorder) == 0 {
+		return nil
+	}
+	// 前序遍历第一个元素为根节点
+	root := &TreeNode{preorder[0], nil, nil}
+
+	// 在中序遍历中查找根节点位置
+	i := 0
+	for ; i < len(inorder); i++ {
+		if inorder[i] == preorder[0] {
+			break
+		}
+	}
+
+	// 递归构建左右子树
+	// 参数为左子数的前序遍历，中序遍历
+	// 前序遍历的左子树需要通过中序遍历计算出的长度确定
+	index := len(inorder[:i]) + 1
+	root.Left = buildTree(preorder[1:index], inorder[:i])
+
+	// 参数为右子数的前序遍历，中序遍历
+	root.Right = buildTree(preorder[index:], inorder[i+1:])
+	return root
+}
+
+// 124. 二叉树中的最大路径和
+func maxPathSum(root *TreeNode) int {
+	minNum := -1 << 20
+	// math.MinInt32
+	var oneSizeMax func(root *TreeNode) int
+	oneSizeMax = func(root *TreeNode) int {
+		if root == nil {
+			return 0
+		}
+
+		left := max(0, oneSizeMax(root.Left))
+		right := max(0, oneSizeMax(root.Right))
+
+		minNum = max(minNum, left+right+root.Val)
+
+		log.Print(left, right, root.Val)
+
+		return max(left, right) + root.Val
+	}
+	oneSizeMax(root)
+	return minNum
+}
+
+// 230. 二叉搜索树中第K小的元素
+func kthSmallest(root *TreeNode, k int) int {
+	// 二叉搜索树 中序遍历是有序的
+	// 左 中 右
+	index, num := 0, 0
+
+	var scanNode func(root *TreeNode)
+	scanNode = func(root *TreeNode) {
+		if root == nil {
+			return
+		}
+		scanNode(root.Left)
+		index++
+		if k == index {
+			num = root.Val
+			return
+		}
+		scanNode(root.Right)
+	}
+	scanNode(root)
+	return num
+}
