@@ -94,6 +94,16 @@ func TestPartition(t *testing.T) {
 	scanList(rs)
 }
 
+func TestRemoveElement(t *testing.T) {
+	removeElement([]int{2, 3, 3, 2}, 3)
+}
+
+func TestIsPalindrome(t *testing.T) {
+	s := "A man, a plan, a canal: Panama"
+	rs := isPalindrome(s)
+	t.Log(rs)
+}
+
 func TestCommon(t *testing.T) {
 	Common()
 }

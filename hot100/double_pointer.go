@@ -3,6 +3,8 @@ package hot100
 import (
 	"container/heap"
 	"log"
+	"strings"
+	"unicode"
 )
 
 /*
@@ -264,4 +266,162 @@ func getIntersectionNodeV2(headA, headB *ListNode) *ListNode {
 		}
 	}
 	return p1
+}
+
+// 26. 删除有序数组中的重复项
+func removeDuplicates(nums []int) int {
+	if len(nums) == 0 {
+		return 0
+	}
+	slow, fast := 0, 0
+	for fast < len(nums) {
+		if nums[slow] != nums[fast] {
+			slow++
+			nums[slow] = nums[fast]
+		}
+		fast++
+	}
+	return slow + 1
+}
+
+// 83. 删除排序链表中的重复元素
+func deleteDuplicates(head *ListNode) *ListNode {
+	if head == nil {
+		return nil
+	}
+	slow, fast := head, head
+	for fast != nil {
+		if slow.Val != fast.Val {
+			slow.Next = fast
+			slow = slow.Next
+		}
+		fast = fast.Next
+	}
+	slow.Next = nil
+	return head
+}
+
+// 27. 移除元素
+func removeElement(nums []int, val int) int {
+	if len(nums) == 0 {
+		return 0
+	}
+	slow, fast := 0, 0
+	for fast < len(nums) {
+		if nums[fast] != val {
+			nums[slow] = nums[fast]
+			slow++
+		}
+		fast++
+	}
+	return slow
+}
+
+// 283. 移动零
+func moveZeroes(nums []int) {
+	if len(nums) == 0 {
+		return
+	}
+	// 寻找所有等于0的数据，进行移除
+	slow, fast := 0, 0
+	for fast < len(nums) {
+		if nums[fast] != 0 {
+			nums[slow] = nums[fast]
+			slow++
+		}
+		fast++
+	}
+
+	// 替换后面非零的数据
+	for ; slow < len(nums); slow++ {
+		nums[slow] = 0
+	}
+}
+
+// 167. 两数之和 II - 输入有序数组
+func twoSumTarget(numbers []int, target int) []int {
+	left, right := 0, len(numbers)-1
+	for left < right {
+		sum := numbers[left] + numbers[right]
+		if sum == target {
+			return []int{left + 1, right + 1}
+		} else if sum < target {
+			left++
+		} else if sum > target {
+			right--
+		}
+	}
+	return []int{-1, -1}
+}
+
+// 344. 反转字符串
+func reverseString(s []byte) {
+	left, right := 0, len(s)-1
+
+	for left < right {
+		s[left], s[right] = s[right], s[left]
+		left++
+		right--
+	}
+}
+
+// 125. 验证回文串
+func isPalindrome(s string) bool {
+	if len(s) <= 1 {
+		return true
+	}
+	// 判断是否合法的字符
+	isValid := func(v rune) bool {
+		return unicode.IsDigit(v) || unicode.IsLetter(v)
+	}
+	s = strings.ToLower(s)
+	str := []rune(s)
+	log.Println(string(str))
+	slow, fast := 0, len(s)-1
+	for slow < fast {
+		if !isValid(str[slow]) {
+			slow++
+			continue
+		}
+		if !isValid(str[fast]) {
+			fast--
+			continue
+		}
+
+		if str[slow] != str[fast] {
+			log.Println(slow, fast, string(str[slow]), unicode.IsLetter(str[slow]))
+			return false
+		}
+		slow++
+		fast--
+	}
+	return true
+}
+
+// 5. 最长回文子串
+func longestPalindrome(s string) string {
+	res := ""
+	for i := 0; i < len(s); i++ {
+		s1 := palindrome(s, i, i)
+		s2 := palindrome(s, i, i+1)
+
+		if len(res) < len(s1) {
+			res = s1
+		}
+		if len(res) < len(s2) {
+			res = s2
+		}
+	}
+	return res
+}
+
+func palindrome(s string, l int, r int) string {
+	// 防止索引越界
+	for l >= 0 && r < len(s) && s[l] == s[r] {
+		// 向两边展开
+		l--
+		r++
+	}
+	// 返回以 s[l] 和 s[r] 为中心的最长回文串
+	return s[l+1 : r]
 }
