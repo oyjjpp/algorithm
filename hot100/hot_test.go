@@ -73,3 +73,27 @@ func TestMaxPathSum(t *testing.T) {
 	rs := maxPathSum(data)
 	t.Log(rs)
 }
+
+func TestPartition(t *testing.T) {
+	root := &ListNode{
+		Val: 5,
+		Next: &ListNode{
+			Val: 3,
+			Next: &ListNode{
+				Val: 12,
+				Next: &ListNode{
+					Val:  6,
+					Next: &ListNode{Val: 9},
+				},
+			},
+		},
+	}
+	scanList(root)
+	t.Log("")
+	rs := partition(root, 7)
+	scanList(rs)
+}
+
+func TestCommon(t *testing.T) {
+	Common()
+}

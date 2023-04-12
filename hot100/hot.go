@@ -76,6 +76,7 @@ func scanList(node *ListNode) {
 }
 
 // 3.无重复字符的最长子串
+// 快慢指针
 func lengthOfLongestSubstring(s string) int {
 	window := map[byte]int{}
 	left, right := 0, 0
@@ -195,6 +196,7 @@ func findMedianSortedArraysV(nums1 []int, nums2 []int) float64 {
 }
 
 // 76. 最小覆盖子串
+// 快慢指针
 func minWindow(s string, t string) string {
 	need := map[byte]int{}
 
