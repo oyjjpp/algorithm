@@ -133,3 +133,135 @@ func (pq *PriorityQueue) Pop() interface{} {
 	*pq = old[0 : n-1]
 	return node
 }
+
+// 剑指 Offer 22. 链表中倒数第k个节点
+func getKthFromEnd(head *ListNode, k int) *ListNode {
+	p1 := head
+	// 先让P1走K步
+	for i := 0; i < k; i++ {
+		p1 = p1.Next
+	}
+	p2 := head
+	// p1 和 p2 同时走n-k步
+	for p1 != nil {
+		p1 = p1.Next
+		p2 = p2.Next
+	}
+	return p2
+}
+
+// 19. 删除链表的倒数第 N 个结点
+func removeNthFromEnd(head *ListNode, n int) *ListNode {
+	// 使用虚拟节点 避免越界
+	dummy := &ListNode{-1, head}
+
+	// 搜索倒数第N个节点
+	var getKthFromEnd func(head *ListNode, k int) *ListNode
+	getKthFromEnd = func(head *ListNode, k int) *ListNode {
+		p1 := head
+		// 先让P1走K步
+		for i := 0; i < k; i++ {
+			p1 = p1.Next
+		}
+		p2 := head
+		// p1 和 p2 同时走n-k步
+		for p1 != nil {
+			p1 = p1.Next
+			p2 = p2.Next
+		}
+		return p2
+	}
+	x := getKthFromEnd(dummy, n+1)
+	x.Next = x.Next.Next
+	return dummy.Next
+}
+
+// 876. 链表的中间结点
+func middleNode(head *ListNode) *ListNode {
+	left, right := head, head
+
+	for right != nil && right.Next != nil {
+		left = left.Next
+		right = right.Next.Next
+	}
+	return left
+}
+
+// 141. 环形链表
+func hasCycle(head *ListNode) bool {
+	left, right := head, head
+
+	for right != nil && right.Next != nil {
+		left = left.Next
+		right = right.Next.Next
+
+		if left == right {
+			return true
+		}
+	}
+	return false
+}
+
+// 剑指 Offer II 022. 链表中环的入口节点
+func detectCycle(head *ListNode) *ListNode {
+	left, right := head, head
+
+	// 通过快慢指针寻找到环的入口
+	for right != nil && right.Next != nil {
+		left = left.Next
+		right = right.Next.Next
+
+		if left == right {
+			break
+		}
+	}
+	if right == nil || right.Next == nil {
+		return nil
+	}
+	left = head
+
+	for left != right {
+		left = left.Next
+		right = right.Next
+	}
+	return left
+}
+
+// 160. 相交链表
+func getIntersectionNode(headA, headB *ListNode) *ListNode {
+	data := map[*ListNode]struct{}{}
+	left := headA
+	for left != nil {
+		data[left] = struct{}{}
+		left = left.Next
+	}
+
+	right := headB
+	for right != nil {
+		if _, ok := data[right]; ok {
+			return right
+		}
+		right = right.Next
+	}
+
+	return nil
+}
+
+// 160. 相交链表
+func getIntersectionNodeV2(headA, headB *ListNode) *ListNode {
+	p1, p2 := headA, headB
+	for p1 != p2 {
+		if p1 == nil {
+			p1 = headB
+		} else {
+			p1 = p1.Next
+		}
+
+		if p2 == nil {
+			p2 = headA
+		} else {
+			p2 = p2.Next
+		}
+	}
+	return p1
+}
