@@ -120,8 +120,16 @@ func TestMaxDepth(t *testing.T) {
 
 func TestPrintBinaryLevel(t *testing.T) {
 	data := &TreeNode{
-		Val:  3,
-		Left: &TreeNode{Val: 9},
+		Val: 3,
+		Left: &TreeNode{
+			Val: 9,
+			Left: &TreeNode{
+				Val: 6,
+				Right: &TreeNode{
+					Val: 1,
+				},
+			},
+		},
 		Right: &TreeNode{
 			Val:   20,
 			Left:  &TreeNode{Val: 15},
