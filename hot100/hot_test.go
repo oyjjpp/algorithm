@@ -178,6 +178,11 @@ func TestMinDepth(t *testing.T) {
 	t.Log(rs)
 }
 
+func TestSearchRange(t *testing.T) {
+	rs := searchRange([]int{5, 7, 7, 8, 8, 10}, 8)
+	t.Log(rs)
+}
+
 func TestCommon(t *testing.T) {
 	Common()
 }
