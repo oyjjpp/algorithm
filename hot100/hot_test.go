@@ -1,6 +1,8 @@
 package hot100
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestAddTwoNumbers(t *testing.T) {
 	l1 := &ListNode{
@@ -137,6 +139,43 @@ func TestPrintBinaryLevel(t *testing.T) {
 		},
 	}
 	printBinaryLevel(data)
+}
+
+func TestSubsets(t *testing.T) {
+	data := []int{1, 2, 3}
+	rs := subsets(data)
+	t.Log(rs)
+}
+
+func TestCombine(t *testing.T) {
+	rs := combine(4, 2)
+	for item, key := range rs {
+		t.Log(item, key)
+	}
+
+}
+
+func TestPermuteRepeat(t *testing.T) {
+	data := []int{1, 2, 3}
+	rs := permuteRepeat(data)
+	for _, value := range rs {
+		t.Log(value)
+	}
+}
+
+func TestMinDepth(t *testing.T) {
+	data := &TreeNode{
+		Val: 1,
+		Right: &TreeNode{
+			Val:   3,
+			Left:  &TreeNode{Val: 4},
+			Right: &TreeNode{Val: 5},
+		},
+		Left: &TreeNode{Val: 2},
+	}
+
+	rs := minDepth(data)
+	t.Log(rs)
 }
 
 func TestCommon(t *testing.T) {
