@@ -324,3 +324,124 @@ func kthSmallest(root *TreeNode, k int) int {
 	scanNode(root)
 	return num
 }
+
+// 76. 最小覆盖子串
+func minWindowV(s string, t string) string {
+	need := make(map[byte]int, 0)
+	for _, v := range []byte(t) {
+		need[v]++
+	}
+	// 初始化窗口
+	window := make(map[byte]int, 0)
+
+	// 有效数量
+	number, maxNum := 0, 1<<31-1
+	left, right := 0, 0
+	start, length := 0, maxNum
+	for right < len(s) {
+		// 增加窗口
+		cur := s[right]
+		if _, ok := need[cur]; ok {
+			window[cur]++
+			// 有效值相等
+			if window[cur] == need[cur] {
+				number++
+			}
+		}
+
+		// 增大窗口
+		right++
+
+		// 开始缩进窗口
+		for number == len(need) {
+			if (right - left) < length {
+				start = left
+				length = right - left
+			}
+			delEle := s[left]
+			left++
+
+			if _, ok := need[delEle]; ok {
+				if window[delEle] == need[delEle] {
+					number--
+				}
+				window[delEle]--
+			}
+		}
+	}
+	if length == maxNum {
+		return ""
+	}
+	return s[start : start+length]
+}
+
+// 567. 字符串的排列
+func checkInclusion(t string, s string) bool {
+	need := make(map[byte]int)
+	window := make(map[byte]int)
+	for _, c := range []byte(t) {
+		need[c]++
+	}
+	left := 0
+	right := 0
+	valid := 0
+	for right < len(s) {
+		c := s[right]
+		right++
+		// 进行窗口内数据的一系列更新
+		if _, ok := need[c]; ok {
+			window[c]++
+			if window[c] == need[c] {
+				valid++
+			}
+		}
+
+		log.Println(right, left)
+		// 判断左侧窗口是否要收缩
+		for right-left >= len(t) {
+			// 在这里判断是否找到了合法的子串
+			if valid == len(need) {
+				return true
+			}
+			d := s[left]
+			left++
+			// 进行窗口内数据的一系列更新
+			if _, ok := need[d]; ok {
+				if window[d] == need[d] {
+					valid--
+				}
+				window[d]--
+			}
+		}
+	}
+	// 未找到符合条件的子串
+	return false
+}
+
+func lengthOfLongestSubstringV(s string) int {
+
+	max := func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+	left, right := 0, 0
+	window := make(map[byte]int, 0)
+
+	length := -1 << 10
+	for right < len(s) {
+		ele := s[right]
+		right++
+		window[ele]++
+
+		for window[ele] > 1 {
+			del_ele := s[left]
+			left++
+			window[del_ele]--
+		}
+		length = max(length, right-left)
+	}
+
+	return length
+}

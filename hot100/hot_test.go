@@ -186,3 +186,17 @@ func TestSearchRange(t *testing.T) {
 func TestCommon(t *testing.T) {
 	Common()
 }
+
+func TestMinWindowV(t *testing.T) {
+	s := "ADOBECODEBANC"
+	str := "ABC"
+	rs := minWindowV(s, str)
+	t.Log(rs)
+}
+
+func TestCheckInclusion(t *testing.T) {
+	s1 := "ab"
+	s2 := "eidboaoo"
+	rs := checkInclusion(s1, s2)
+	t.Log(rs)
+}
