@@ -222,3 +222,127 @@ func maxProfit_v(prices []int) int {
 
 	return dp[n-1][k][0]
 }
+
+// 状态
+// 选择 偷、不偷
+
+// 198. 打家劫舍
+func rob(nums []int) int {
+	var max func(a, b int) int
+	max = func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+
+	data := map[int]int{}
+	res := 0
+	var dp func(number []int, start int) int
+	dp = func(number []int, start int) int {
+		if start >= len(number) {
+			return 0
+		}
+
+		if temp, ok := data[start]; ok {
+			return temp
+		}
+		// 不去抢
+		res = max(dp(number, start+1), dp(number, start+2)+number[start])
+		data[start] = res
+		return res
+	}
+	res = dp(nums, 0)
+	return res
+}
+
+// 198. 打家劫舍
+func rob_v1(nums []int) int {
+	var max func(a, b int) int
+	max = func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+
+	length := len(nums)
+	data := make([]int, length+2)
+
+	for i := length - 1; i >= 0; i-- {
+		data[i] = max(data[i+1], data[i+2]+nums[i])
+	}
+	return data[0]
+}
+
+// 213. 打家劫舍 II
+func rob_v2(nums []int) int {
+	if len(nums) == 1 {
+		return nums[0]
+	}
+	var max func(a, b int) int
+	max = func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+	var dp func(number []int) int
+	dp = func(number []int) int {
+		length := len(number)
+		data := make([]int, length+2)
+
+		for i := length - 1; i >= 0; i-- {
+			data[i] = max(data[i+1], data[i+2]+number[i])
+		}
+		return data[0]
+	}
+	temp1 := nums[0 : len(nums)-1]
+	temp2 := nums[1:]
+	fmt.Println(temp1)
+	fmt.Println(temp2)
+	res := max(dp(temp1), dp(temp2))
+	return res
+}
+
+// 337. 打家劫舍 III
+func rob_v3(root *TreeNode) int {
+	var max func(a, b int) int
+	max = func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+	data := make(map[*TreeNode]int, 0)
+	var dp func(node *TreeNode) int
+	dp = func(node *TreeNode) int {
+		if node == nil {
+			return 0
+		}
+
+		if temp, ok := data[node]; ok {
+			return temp
+		}
+
+		// 不抢
+		notDo := dp(node.Left) + dp(node.Right)
+
+		// 抢
+		doIt := node.Val
+		if node.Left != nil {
+			doIt += dp(node.Left.Left) + dp(node.Left.Right)
+		}
+
+		if node.Right != nil {
+			doIt += dp(node.Right.Left) + dp(node.Right.Right)
+		}
+
+		res := max(notDo, doIt)
+		data[node] = res
+		return res
+	}
+
+	res := dp(root)
+	return res
+}

@@ -2,6 +2,7 @@ package hot100
 
 import (
 	"log"
+	"sort"
 )
 
 // 1.两数之和
@@ -16,6 +17,95 @@ func twoSum(nums []int, target int) []int {
 		data[v] = k
 	}
 	return nil
+}
+
+func twoSumV1(nums []int, target int) []int {
+	sort.Ints(nums)
+	left, right := 0, len(nums)-1
+	for left < right {
+		mid := nums[left] + nums[right]
+		if mid == target {
+			return []int{left, right}
+		} else if mid > target {
+			right--
+		} else if mid < target {
+			left++
+		}
+	}
+	return nil
+}
+
+// 15. 三数之和
+/* 计算数组 nums 中所有和为 target 的三元组 */
+func threeSumTarget(nums []int, target int) [][]int {
+	var twoSumTarget func(nums []int, target int) [][]int
+	twoSumTarget = func(nums []int, target int) [][]int {
+		// nums 数组必须有序
+		sort.Ints(nums)
+		lo, hi := 0, len(nums)-1
+		res := [][]int{}
+		for lo < hi {
+			sum := nums[lo] + nums[hi]
+			left, right := nums[lo], nums[hi]
+			if sum < target {
+				for lo < hi && nums[lo] == left {
+					lo++
+				}
+			} else if sum > target {
+				for lo < hi && nums[hi] == right {
+					hi--
+				}
+			} else {
+				res = append(res, []int{left, right})
+				for lo < hi && nums[lo] == left {
+					lo++
+				}
+				for lo < hi && nums[hi] == right {
+					hi--
+				}
+			}
+		}
+		return res
+	}
+
+	// 数组得排个序
+	sort.Ints(nums)
+	n := len(nums)
+	res := [][]int{}
+	// 穷举 threeSum 的第一个数
+	for i := 0; i < n; i++ {
+		// 对 target - nums[i] 计算 twoSum
+		tuples := twoSumTarget(nums[i+1:], target-nums[i])
+		// 如果存在满足条件的二元组，再加上 nums[i] 就是结果三元组
+		for _, tuple := range tuples {
+			tuple = append(tuple, nums[i])
+			res = append(res, tuple)
+		}
+		// 跳过第一个数字重复的情况，否则会出现重复结果
+		for i < n-1 && nums[i] == nums[i+1] {
+			i++
+		}
+	}
+	return res
+}
+
+// 18. 四数之和
+func fourSum(nums []int, target int) [][]int {
+	sort.Ints(nums)
+	res := make([][]int, 0)
+	length := len(nums)
+	for i := 0; i < length; i++ {
+		eleList := threeSumTarget(nums[i+1:], target-nums[i])
+
+		for _, ele := range eleList {
+			ele = append(ele, nums[i])
+			res = append(res, ele)
+		}
+		for i < length-1 && nums[i] == nums[i+1] {
+			i++
+		}
+	}
+	return res
 }
 
 type ListNode struct {

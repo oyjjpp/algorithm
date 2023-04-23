@@ -200,3 +200,9 @@ func TestCheckInclusion(t *testing.T) {
 	rs := checkInclusion(s1, s2)
 	t.Log(rs)
 }
+
+func TestRob_v2(t *testing.T) {
+	temp := []int{1, 2, 3, 1}
+	rs := rob_v2(temp)
+	t.Log(rs)
+}
