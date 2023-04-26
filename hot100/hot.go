@@ -535,3 +535,23 @@ func lengthOfLongestSubstringV(s string) int {
 
 	return length
 }
+
+func mergeTwoListsV(l1 *ListNode, l2 *ListNode) *ListNode {
+	res := &ListNode{}
+	p1 := l1
+	p2 := l2
+
+	for p1 != nil && p2 != nil {
+		if p1.Val > p2.Val {
+			temp := p2.Next
+			res.Next = p2
+			p2 = temp
+		} else {
+			temp := p1.Next
+			res.Next = p1
+			p1 = temp
+		}
+	}
+
+	return nil
+}
