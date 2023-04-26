@@ -230,3 +230,52 @@ func TestRemoveNthFromEndV(t *testing.T) {
 		rs = rs.Next
 	}
 }
+
+func TestReverse(t *testing.T) {
+	data := &ListNode{
+		Val: 1,
+		Next: &ListNode{
+			Val: 2,
+			Next: &ListNode{
+				Val: 3,
+				Next: &ListNode{
+					Val: 4,
+					Next: &ListNode{
+						Val: 5,
+						Next: &ListNode{
+							Val: 6,
+						},
+					},
+				},
+			},
+		},
+	}
+	rs := reverse(data)
+
+	for rs != nil {
+		t.Logf("%d", rs.Val)
+		rs = rs.Next
+	}
+}
+
+func TestReverseList(t *testing.T) {
+	data := &ListNode{
+		Val: 1,
+		Next: &ListNode{
+			Val: 2,
+			Next: &ListNode{
+				Val: 3,
+				Next: &ListNode{
+					Val: 4,
+					Next: &ListNode{
+						Val: 5,
+						Next: &ListNode{
+							Val: 6,
+						},
+					},
+				},
+			},
+		},
+	}
+	reverseList(data)
+}

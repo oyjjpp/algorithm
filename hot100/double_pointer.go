@@ -425,3 +425,41 @@ func palindrome(s string, l int, r int) string {
 	// 返回以 s[l] 和 s[r] 为中心的最长回文串
 	return s[l+1 : r]
 }
+
+// 19. 删除链表的倒数第 N 个结点
+// 通过双指针找到该节点的位置
+// 然后删除节点
+func removeNthFromEndV(head *ListNode, n int) *ListNode {
+	newNode := &ListNode{0, head}
+	left, right := newNode, head
+
+	index := 0
+	for right != nil {
+		index++
+		if index > n {
+			left = left.Next
+		}
+		right = right.Next
+	}
+
+	left.Next = left.Next.Next
+	return newNode.Next
+}
+
+func getIntersectionNodeV(headA, headB *ListNode) *ListNode {
+	left, right := headA, headB
+	for left != right {
+		if left == nil {
+			left = headB
+		} else {
+			left = left.Next
+		}
+
+		if right == nil {
+			right = headA
+		} else {
+			right = right.Next
+		}
+	}
+	return left
+}

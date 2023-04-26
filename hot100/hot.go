@@ -556,22 +556,67 @@ func mergeTwoListsV(l1 *ListNode, l2 *ListNode) *ListNode {
 	return nil
 }
 
-// 19. 删除链表的倒数第 N 个结点
-// 通过双指针找到该节点的位置
-// 然后删除节点
-func removeNthFromEndV(head *ListNode, n int) *ListNode {
-	newNode := &ListNode{0, head}
-	left, right := newNode, head
+var queueNumber int
+var scanNumber = make(map[int]int, 0)
 
-	index := 0
-	for right != nil {
-		index++
-		if index > n {
-			left = left.Next
-		}
-		right = right.Next
+func reverse(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	queueNumber++
+	temp := queueNumber
+	log.Println("push", temp, head.Val)
+	last := reverse(head.Next)
+	log.Println("pop", temp, last.Val, head.Val)
+	head.Next.Next = head
+	head.Next = nil
+
+	p := head
+	for p != nil {
+		log.Printf("%d", p.Val)
+		p = p.Next
+	}
+	return last
+}
+
+// 206. 反转链表
+func reverseList(head *ListNode) *ListNode {
+	// pre := new(ListNode)
+	var pre *ListNode
+	log.Println(pre.Val)
+	//
+
+	p := head
+	for p != nil {
+		next := p.Next
+		p.Next = pre
+		pre = p
+		p = next
+	}
+	return pre
+}
+
+// 92. 反转链表 II
+func reverseBetween(head *ListNode, left int, right int) *ListNode {
+	if left == 1 {
+		return reverseN(head, right)
 	}
 
-	left.Next = left.Next.Next
-	return newNode.Next
+	head.Next = reverseBetween(head.Next, left-1, right-1)
+	return head
+}
+
+// 保存后续
+var nextList *ListNode
+
+func reverseN(head *ListNode, n int) *ListNode {
+	if n == 1 {
+		nextList = head.Next
+		return head
+	}
+
+	last := reverseN(head.Next, n-1)
+	head.Next.Next = head
+	head.Next = nextList
+	return last
 }
