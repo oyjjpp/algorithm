@@ -555,3 +555,23 @@ func mergeTwoListsV(l1 *ListNode, l2 *ListNode) *ListNode {
 
 	return nil
 }
+
+// 19. 删除链表的倒数第 N 个结点
+// 通过双指针找到该节点的位置
+// 然后删除节点
+func removeNthFromEndV(head *ListNode, n int) *ListNode {
+	newNode := &ListNode{0, head}
+	left, right := newNode, head
+
+	index := 0
+	for right != nil {
+		index++
+		if index > n {
+			left = left.Next
+		}
+		right = right.Next
+	}
+
+	left.Next = left.Next.Next
+	return newNode.Next
+}

@@ -206,3 +206,27 @@ func TestRob_v2(t *testing.T) {
 	rs := rob_v2(temp)
 	t.Log(rs)
 }
+
+func TestRemoveNthFromEndV(t *testing.T) {
+	data := &ListNode{
+		Val: 1,
+		Next: &ListNode{
+			Val: 2,
+			Next: &ListNode{
+				Val: 3,
+				Next: &ListNode{
+					Val: 4,
+					Next: &ListNode{
+						Val: 5,
+					},
+				},
+			},
+		},
+	}
+	rs := removeNthFromEndV(data, 2)
+
+	for rs != nil {
+		t.Log(rs)
+		rs = rs.Next
+	}
+}

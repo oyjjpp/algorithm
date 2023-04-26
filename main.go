@@ -1,44 +1,31 @@
 package main
 
-import "fmt"
-
-func main() {
-	doString()
+type ListNode struct {
+	Val  int
+	Next *ListNode
 }
 
-func doString() {
-	ci := make(chan int, 2)
-	for i := 1; i <= 2; i++ {
-		ci <- i
-	}
-	close(ci)
+func main() {
+}
 
-	cs := make(chan string, 2)
-	cs <- "hi"
-	cs <- "golang"
-	close(cs)
-	ciClosed, csClosed := false, false
-	for {
-		if ciClosed && csClosed {
-			return
+func removeNthFromEnd(head *ListNode, n int) *ListNode {
+	dummy := &ListNode{-1, head}
+	var getKthFromEnd func(head *ListNode, k int) *ListNode
+	getKthFromEnd = func(head *ListNode, k int) *ListNode {
+		p1 := head
+		// 先让P1走K步
+		for i := 0; i < k; i++ {
+			p1 = p1.Next
 		}
-		select {
-		case i, ok := <-ci:
-			if ok {
-				fmt.Println(i)
-			} else {
-				ciClosed = true
-				fmt.Println("ci closed")
-			}
-		case s, ok := <-cs:
-			if ok {
-				fmt.Println(s)
-			} else {
-				csClosed = true
-				fmt.Println("cs closed")
-			}
-		default:
-			fmt.Println("waiting...")
+		p2 := head
+		// p1 和 p2 同时走n-k步
+		for p1 != nil {
+			p1 = p1.Next
+			p2 = p2.Next
 		}
+		return p2
 	}
+	x := getKthFromEnd(dummy, n+1)
+	x.Next = x.Next.Next
+	return dummy.Next
 }
