@@ -279,3 +279,20 @@ func TestReverseList(t *testing.T) {
 	}
 	reverseList(data)
 }
+
+func TestIsPalindromeList(t *testing.T) {
+	data := &ListNode{
+		Val: 1,
+		Next: &ListNode{
+			Val: 1,
+			Next: &ListNode{
+				Val: 2,
+				Next: &ListNode{
+					Val: 1,
+				},
+			},
+		},
+	}
+	rs := isPalindromeList(data)
+	t.Log(rs)
+}

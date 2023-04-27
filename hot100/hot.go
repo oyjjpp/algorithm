@@ -556,36 +556,27 @@ func mergeTwoListsV(l1 *ListNode, l2 *ListNode) *ListNode {
 	return nil
 }
 
-var queueNumber int
-var scanNumber = make(map[int]int, 0)
-
+// 206. 反转链表
+// 递归
 func reverse(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
 		return head
 	}
-	queueNumber++
-	temp := queueNumber
-	log.Println("push", temp, head.Val)
 	last := reverse(head.Next)
-	log.Println("pop", temp, last.Val, head.Val)
+	// 把当前节点的子节点的子节点指向当前节点
+	// 1>2>3>4<>5
 	head.Next.Next = head
+	// 头结点变成了尾节点，所以需要置空
+	// 1>2>3>4<5
 	head.Next = nil
 
-	p := head
-	for p != nil {
-		log.Printf("%d", p.Val)
-		p = p.Next
-	}
 	return last
 }
 
 // 206. 反转链表
+// 迭代
 func reverseList(head *ListNode) *ListNode {
-	// pre := new(ListNode)
 	var pre *ListNode
-	log.Println(pre.Val)
-	//
-
 	p := head
 	for p != nil {
 		next := p.Next
@@ -596,16 +587,25 @@ func reverseList(head *ListNode) *ListNode {
 	return pre
 }
 
-// 92. 反转链表 II
-func reverseBetween(head *ListNode, left int, right int) *ListNode {
-	if left == 1 {
-		return reverseN(head, right)
+// 234. 回文链表
+func isPalindromeList(head *ListNode) bool {
+	right := head
+	var traverse func(*ListNode) bool
+	traverse = func(node *ListNode) bool {
+		if node == nil {
+			return true
+		}
+		res := traverse(node.Next)
+		// 后序遍历代码
+		res = res && (node.Val == right.Val)
+		right = right.Next
+		return res
 	}
 
-	head.Next = reverseBetween(head.Next, left-1, right-1)
-	return head
+	return traverse(head)
 }
 
+// 反转链表的前N个元素
 // 保存后续
 var nextList *ListNode
 
@@ -619,4 +619,56 @@ func reverseN(head *ListNode, n int) *ListNode {
 	head.Next.Next = head
 	head.Next = nextList
 	return last
+}
+
+// 92. 反转链表 II
+// 1,2,3,4,5,6
+// 3,5
+// 1,2,5,4,3,6
+func reverseBetween(head *ListNode, left int, right int) *ListNode {
+	if left == 1 {
+		return reverseN(head, right)
+	}
+
+	// 前进到反转的起点触发 base case
+	head.Next = reverseBetween(head.Next, left-1, right-1)
+	return head
+}
+
+// 25. K 个一组翻转链表
+func reverseKGroup(head *ListNode, k int) *ListNode {
+	if head == nil {
+		return nil
+	}
+
+	a, b := head, head
+
+	// 迭代出k个 元素
+	for i := 0; i < k; i++ {
+		// 如果长度不足直接返回
+		if b == nil {
+			return head
+		}
+		b = b.Next
+	}
+	// 先反转以head开头的k的元素
+	newHead := reverseRange(a, b)
+	// 将第 k + 1 个元素作为 head 递归调用 reverseKGroup 函数。
+	a.Next = reverseKGroup(b, k)
+	return newHead
+}
+
+// 反转一定范围的链表
+func reverseRange(a, b *ListNode) *ListNode {
+	var pre *ListNode
+	cur := a
+	// while 终止的条件改一下就行了
+	for cur != b {
+		temp := cur.Next
+		cur.Next = pre
+		pre = cur
+		cur = temp
+	}
+	// 返回反转后的头结点
+	return pre
 }

@@ -366,6 +366,7 @@ func reverseString(s []byte) {
 }
 
 // 125. 验证回文串
+// 双指针
 func isPalindrome(s string) bool {
 	if len(s) <= 1 {
 		return true
@@ -374,22 +375,24 @@ func isPalindrome(s string) bool {
 	isValid := func(v rune) bool {
 		return unicode.IsDigit(v) || unicode.IsLetter(v)
 	}
+
 	s = strings.ToLower(s)
 	str := []rune(s)
-	log.Println(string(str))
 	slow, fast := 0, len(s)-1
 	for slow < fast {
+		// 不是字符串
 		if !isValid(str[slow]) {
 			slow++
 			continue
 		}
+
+		// 验证是否字符串
 		if !isValid(str[fast]) {
 			fast--
 			continue
 		}
 
 		if str[slow] != str[fast] {
-			log.Println(slow, fast, string(str[slow]), unicode.IsLetter(str[slow]))
 			return false
 		}
 		slow++
@@ -399,6 +402,7 @@ func isPalindrome(s string) bool {
 }
 
 // 5. 最长回文子串
+// 从中心向两端扩散的双指针技巧
 func longestPalindrome(s string) string {
 	res := ""
 	for i := 0; i < len(s); i++ {
