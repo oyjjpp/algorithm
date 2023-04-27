@@ -1,8 +1,12 @@
 package hot100
 
 import (
+	"container/heap"
+	"fmt"
 	"log"
 	"sort"
+	"strings"
+	"unicode"
 )
 
 // 1.两数之和
@@ -671,4 +675,1403 @@ func reverseRange(a, b *ListNode) *ListNode {
 	}
 	// 返回反转后的头结点
 	return pre
+}
+
+// 111. 二叉树的最小深度
+func minDepth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+
+	queue := make([]*TreeNode, 0)
+	queue = append(queue, root)
+
+	minPath := 1
+
+	for len(queue) > 0 {
+		sz := len(queue)
+
+		for i := 0; i < sz; i++ {
+			node := queue[i]
+			log.Println(i, node.Val)
+			// 碰到叶子节点
+			if node.Left == nil && node.Right == nil {
+				return minPath
+			}
+			if queue[i].Left != nil {
+				queue = append(queue, queue[i].Left)
+			}
+			if queue[i].Right != nil {
+				queue = append(queue, queue[i].Right)
+			}
+		}
+		queue = queue[sz:]
+		minPath++
+	}
+	return minPath
+}
+
+// 752. 打开转盘锁
+func openLock(deadends []string, target string) int {
+	var plusOne func(s string, j int) string
+	plusOne = func(s string, j int) string {
+		ch := []byte(s)
+		if ch[j] == '9' {
+			ch[j] = '0'
+		} else {
+			ch[j] += 1
+		}
+		return string(ch)
+	}
+
+	var minusOne func(s string, j int) string
+	minusOne = func(s string, j int) string {
+		ch := []byte(s)
+		if ch[j] == '0' {
+			ch[j] = '9'
+		} else {
+			ch[j] -= 1
+		}
+		return string(ch)
+	}
+	// 死亡密码
+	deads := make(map[string]bool)
+	for _, s := range deadends {
+		deads[s] = true
+	}
+
+	// 记录已经穷举过的密码，防止走回头路
+	visited := make(map[string]bool)
+
+	queue := make([]string, 0)
+	queue = append(queue, "0000")
+	visited["0000"] = true
+
+	step := 0
+
+	for len(queue) > 0 {
+		sz := len(queue)
+
+		for i := 0; i < sz; i++ {
+			node := queue[0]
+			queue = queue[1:]
+
+			/* 判断是否到达终点 */
+			if _, ok := deads[node]; ok {
+				continue
+			}
+			if node == target {
+				return step
+			}
+
+			for j := 0; j < 4; j++ {
+				up := plusOne(node, j)
+				if _, ok := visited[up]; !ok {
+					queue = append(queue, up)
+					visited[up] = true
+				}
+				down := minusOne(node, j)
+				if _, ok := visited[down]; !ok {
+					queue = append(queue, down)
+					visited[down] = true
+				}
+			}
+		}
+		step++
+	}
+	return -1
+}
+
+// 向上拨动
+func plusOne(s string, j int) string {
+	ch := []byte(s)
+	if ch[j] == '9' {
+		ch[j] = '0'
+	} else {
+		ch[j] += 1
+	}
+	return string(ch)
+}
+
+// 向下拨动
+// 将 s[i] 向下拨动一次
+func minusOne(s string, j int) string {
+	ch := []byte(s)
+	if ch[j] == '0' {
+		ch[j] = '9'
+	} else {
+		ch[j] -= 1
+	}
+	return string(ch)
+}
+
+func searchRange(nums []int, target int) []int {
+	left, right := 0, len(nums)-1
+
+	for left <= right {
+		mid := left + right
+
+		if nums[mid] < target {
+			left = mid + 1
+		} else if nums[mid] > target {
+			right = mid - 1
+		} else if nums[mid] == target {
+			right = mid - 1
+		}
+	}
+	log.Println(left)
+	if left == len(nums) {
+		return []int{-1, -1}
+	}
+
+	if nums[left] == target {
+		for i := left; i < len(nums); i++ {
+			if nums[i] > target {
+				return []int{left, i - 1}
+			}
+		}
+		return []int{left, len(nums) - 1}
+	}
+	return []int{-1, -1}
+}
+
+// 33. 搜索旋转排序数组
+func search(nums []int, target int) int {
+	left, right := 0, len(nums)-1
+	for left <= right {
+		mid := left + (right-left)/2
+		if nums[mid] == target {
+			return mid
+		}
+		if nums[left] <= nums[mid] {
+			if nums[left] <= target && target < nums[mid] {
+				right = mid - 1
+			} else {
+				left = mid + 1
+			}
+		} else {
+			if nums[mid] < target && target <= nums[right] {
+				left = mid + 1
+			} else {
+				right = mid - 1
+			}
+		}
+	}
+	return -1
+}
+
+// 46. 全排列
+func permute(nums []int) [][]int {
+	// 存储结果集
+	res := make([][]int, 0)
+	// 组合元素
+	track := make([]int, 0)
+	used := make([]bool, len(nums))
+
+	var backtrack func(track []int, used []bool)
+	backtrack = func(track []int, used []bool) {
+		if len(track) == len(nums) {
+			temp := make([]int, len(nums))
+			copy(temp, track)
+			res = append(res, temp)
+			return
+		}
+
+		for i := range nums {
+			// 排除不合法的选择
+			if used[i] {
+				continue
+			}
+
+			// 做选择
+			track = append(track, nums[i])
+			used[i] = true
+			backtrack(track, used)
+
+			// 撤销选择
+			track = track[:len(track)-1]
+			used[i] = false
+		}
+	}
+	backtrack(track, used)
+	return res
+}
+
+// 47. 全排列 II
+func permuteUnique(nums []int) [][]int {
+	// 存储结果集
+	res := make([][]int, 0)
+	// 组合元素
+	track := make([]int, 0)
+	used := make([]bool, len(nums))
+
+	var backtrack func(track []int, used []bool)
+	backtrack = func(track []int, used []bool) {
+		if len(track) == len(nums) {
+			temp := make([]int, len(nums))
+			copy(temp, track)
+			res = append(res, temp)
+			return
+		}
+
+		for i := range nums {
+			// 排除不合法的选择
+			if used[i] {
+				continue
+			}
+
+			if i > 0 && nums[i] == nums[i-1] && !used[i-1] {
+				continue
+			}
+
+			// 做选择
+			track = append(track, nums[i])
+			used[i] = true
+			backtrack(track, used)
+
+			// 撤销选择
+			track = track[:len(track)-1]
+			used[i] = false
+		}
+	}
+	sort.Ints(nums)
+	backtrack(track, used)
+	return res
+}
+
+// 排列（元素无重可复选）
+func permuteRepeat(nums []int) [][]int {
+	res := make([][]int, 0)
+	track := make([]int, 0)
+	var backtrack func()
+	backtrack = func() {
+		if len(track) == len(nums) {
+			temp := make([]int, len(nums))
+			copy(temp, track)
+			res = append(res, temp)
+			return
+		}
+
+		for i := 0; i < len(nums); i++ {
+			track = append(track, nums[i])
+			backtrack()
+			track = track[:len(track)-1]
+		}
+	}
+	backtrack()
+	return res
+}
+
+// 51. N 皇后 校验函数
+func solveNQueens(n int) [][]string {
+	// 校验是否为有效范围
+	var isValid func(board []string, row, col int) bool
+	isValid = func(board []string, row, col int) bool {
+		// 检查列
+		for i := 0; i < row; i++ {
+			if board[i][col] == 'Q' {
+				return false
+			}
+		}
+		n := len(board)
+		// 右上方
+		for i, j := row-1, col+1; i >= 0 && j < n; i, j = i-1, j+1 {
+			if board[i][j] == 'Q' {
+				return false
+			}
+		}
+		for i, j := row-1, col-1; i >= 0 && j >= 0; i, j = i-1, j-1 {
+			if board[i][j] == 'Q' {
+				return false
+			}
+		}
+		return true
+	}
+
+	// 保存结果
+	res := make([][]string, 0)
+	board := make([]string, n)
+	for i := 0; i < n; i++ {
+		board[i] = strings.Repeat(".", n)
+	}
+
+	var backtrack func(board []string, row int)
+	backtrack = func(board []string, row int) {
+		if row == len(board) {
+			newRow := make([]string, len(board))
+			copy(newRow, board)
+			res = append(res, newRow)
+			return
+		}
+
+		n := len(board[row])
+		for col := 0; col < n; col++ {
+			// 校验是否符合要求
+			if !isValid(board, row, col) {
+				continue
+			}
+
+			newLine := []byte(board[row])
+			newLine[col] = 'Q'
+			board[row] = string(newLine)
+
+			backtrack(board, row+1)
+
+			newLine[col] = '.'
+			board[row] = string(newLine)
+		}
+	}
+
+	backtrack(board, 0)
+	return res
+}
+
+// 78. 子集
+func subsets(nums []int) [][]int {
+	res := make([][]int, 0)
+	track := make([]int, 0)
+	var backtrack func(start int)
+	backtrack = func(start int) {
+		temp := make([]int, len(track))
+		copy(temp, track)
+		res = append(res, temp)
+
+		// 使用start 保证子集
+		for i := start; i < len(nums); i++ {
+			track = append(track, nums[i])
+			log.Println(i, track)
+			backtrack(i + 1)
+			track = track[:len(track)-1]
+		}
+	}
+	backtrack(0)
+	return res
+}
+
+// 子集 II
+func subsetsWithDup(nums []int) [][]int {
+	res := make([][]int, 0)
+	track := make([]int, 0)
+
+	// 先排序，让相同的元素靠在一起
+	sort.Ints(nums)
+
+	var backtrack func(start int)
+	backtrack = func(start int) {
+		temp := make([]int, len(track))
+		copy(temp, track)
+		res = append(res, temp)
+
+		// 使用start 保证子集
+		for i := start; i < len(nums); i++ {
+
+			// 值相同的 相邻节点 直接过滤
+			if i > start && nums[i] == nums[i-1] {
+				continue
+			}
+			track = append(track, nums[i])
+			log.Println(i, track)
+			backtrack(i + 1)
+			track = track[:len(track)-1]
+		}
+	}
+	backtrack(0)
+	return res
+}
+
+// 77. 组合
+func combine(n int, k int) [][]int {
+	nums := make([]int, 0)
+	for i := 0; i < n; i++ {
+		nums = append(nums, i+1)
+	}
+	res := make([][]int, 0)
+	track := make([]int, 0)
+	var backtrack func(start int)
+	backtrack = func(start int) {
+		if len(track) == k {
+			temp := make([]int, k)
+			copy(temp, track)
+			res = append(res, temp)
+			return
+		}
+
+		// 使用start 保证子集
+		for i := start; i < n; i++ {
+			track = append(track, nums[i])
+			backtrack(i + 1)
+			track = track[:len(track)-1]
+		}
+	}
+	backtrack(0)
+	return res
+}
+
+// 39. 组合总和
+// 子集/组合（元素无重可复选
+func combinationSum(candidates []int, target int) [][]int {
+	res := make([][]int, 0)
+	track := make([]int, 0)
+	trackSum := 0
+
+	var backtrack func(start int)
+	backtrack = func(start int) {
+		if trackSum == target {
+			temp := make([]int, len(track))
+			copy(temp, track)
+			res = append(res, temp)
+		}
+		if trackSum > target {
+			return
+		}
+
+		for i := start; i < len(candidates); i++ {
+			trackSum += candidates[i]
+			track = append(track, candidates[i])
+
+			backtrack(i)
+
+			trackSum -= candidates[i]
+			track = track[:len(track)-1]
+		}
+	}
+	backtrack(0)
+	return res
+}
+
+func maxDepth(root *TreeNode) int {
+	var dp func(root *TreeNode) int
+	dp = func(root *TreeNode) int {
+		if root == nil {
+			return 0
+		}
+
+		left := dp(root.Left)
+		right := dp(root.Right)
+
+		return max(left, right) + 1
+	}
+	return dp(root)
+}
+
+// 扫描二叉树节点所在层次
+func printBinaryLevel(root *TreeNode) {
+	if root == nil {
+		return
+	}
+
+	var dp func(root *TreeNode, level int)
+	dp = func(root *TreeNode, level int) {
+		if root == nil {
+			return
+		}
+
+		dp(root.Left, level+1)
+		log.Printf("node:%d,level:%d", root.Val, level)
+		dp(root.Right, level+1)
+
+	}
+	dp(root, 0)
+}
+
+// 543. 二叉树的直径
+func diameterOfBinaryTree(root *TreeNode) int {
+	var dp func(root *TreeNode) int
+
+	// 可能是左右加起来最大 maxNumber
+	maxNumber := 0
+	dp = func(root *TreeNode) int {
+		if root == nil {
+			return 0
+		}
+
+		left := dp(root.Left)
+		right := dp(root.Right)
+		maxNumber = max(maxNumber, left+right)
+		return max(left, right) + 1
+	}
+
+	dp(root)
+	return maxNumber
+}
+
+// 515. 在每个树行中找最大值
+func largestValues(root *TreeNode) []int {
+	if root == nil {
+		return []int{}
+	}
+
+	data := make([]int, 0)
+	queue := make([]*TreeNode, 0)
+	queue = append(queue, root)
+
+	for len(queue) > 0 {
+		sz := len(queue)
+
+		maxNumber := -1 << 10
+		for i := 0; i < sz; i++ {
+			node := queue[0]
+			queue = queue[1:]
+
+			if node.Val > maxNumber {
+				maxNumber = node.Val
+			}
+
+			if node.Left != nil {
+				queue = append(queue, node.Left)
+			}
+
+			if node.Right != nil {
+				queue = append(queue, node.Right)
+			}
+		}
+
+		data = append(data, maxNumber)
+	}
+	return data
+}
+
+// 21. 合并两个有序链表
+// 双指针
+func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
+	// 使用虚拟头结点，避免解决data空指针问题
+	head := &ListNode{}
+	data := head
+	node1 := list1
+	node2 := list2
+
+	for node1 != nil && node2 != nil {
+		if node1.Val > node2.Val {
+			data.Next = node2
+			node2 = node2.Next
+		} else {
+			data.Next = node1
+			node1 = node1.Next
+		}
+		data = data.Next
+	}
+
+	if node1 != nil {
+		data.Next = node1
+	}
+	if node2 != nil {
+		data.Next = node2
+	}
+	return head.Next
+}
+
+// 86. 分隔链表
+// 双指针
+func partition(head *ListNode, x int) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+
+	small := &ListNode{}
+	smallTail := small
+
+	dummy := &ListNode{0, head}
+
+	pre := dummy
+	cur := head
+
+	for cur != nil {
+		if cur.Val < x {
+			smallTail.Next = cur
+			smallTail = smallTail.Next
+			//相当于删除结点，pre不用动
+			pre.Next = cur.Next
+			cur = cur.Next
+
+		} else {
+			//无事发生,一起移动
+			pre = cur
+			cur = cur.Next
+		}
+
+	}
+
+	smallTail.Next = dummy.Next
+	return small.Next
+}
+
+// 23. 合并 K 个升序链表
+func mergeKLists(lists []*ListNode) *ListNode {
+	if len(lists) == 0 {
+		return nil
+	}
+
+	// 虚拟头结点
+	dummy := &ListNode{}
+	p := dummy
+	log.Println(p)
+
+	// 优先级队列，最小堆
+	pq := make(PriorityQueue, 0)
+	heap.Init(&pq)
+
+	// 将数据加入最小堆
+	for _, head := range lists {
+		if head != nil {
+			heap.Push(&pq, head)
+		}
+	}
+
+	for pq.Len() > 0 {
+		node := heap.Pop(&pq).(*ListNode)
+		p.Next = node
+		if node.Next != nil {
+			heap.Push(&pq, node.Next)
+		}
+		p = p.Next
+	}
+	return dummy.Next
+}
+
+// 优先级队列（二叉堆）
+type PriorityQueue []*ListNode
+
+func (pq PriorityQueue) Len() int {
+	return len(pq)
+}
+
+func (pq PriorityQueue) Less(i, j int) bool {
+	return pq[i].Val < pq[j].Val
+}
+
+func (pq PriorityQueue) Swap(i, j int) {
+	pq[i], pq[j] = pq[j], pq[i]
+}
+
+func (pq *PriorityQueue) Push(x interface{}) {
+	node := x.(*ListNode)
+	*pq = append(*pq, node)
+}
+
+func (pq *PriorityQueue) Pop() interface{} {
+	old := *pq
+	n := len(old)
+	node := old[n-1]
+	*pq = old[0 : n-1]
+	return node
+}
+
+// 剑指 Offer 22. 链表中倒数第k个节点
+func getKthFromEnd(head *ListNode, k int) *ListNode {
+	p1 := head
+	// 先让P1走K步
+	for i := 0; i < k; i++ {
+		p1 = p1.Next
+	}
+	p2 := head
+	// p1 和 p2 同时走n-k步
+	for p1 != nil {
+		p1 = p1.Next
+		p2 = p2.Next
+	}
+	return p2
+}
+
+// 19. 删除链表的倒数第 N 个结点
+func removeNthFromEnd(head *ListNode, n int) *ListNode {
+	// 使用虚拟节点 避免越界
+	dummy := &ListNode{-1, head}
+
+	// 搜索倒数第N个节点
+	var getKthFromEnd func(head *ListNode, k int) *ListNode
+	getKthFromEnd = func(head *ListNode, k int) *ListNode {
+		p1 := head
+		// 先让P1走K步
+		for i := 0; i < k; i++ {
+			p1 = p1.Next
+		}
+		p2 := head
+		// p1 和 p2 同时走n-k步
+		for p1 != nil {
+			p1 = p1.Next
+			p2 = p2.Next
+		}
+		return p2
+	}
+	x := getKthFromEnd(dummy, n+1)
+	x.Next = x.Next.Next
+	return dummy.Next
+}
+
+// 876. 链表的中间结点
+func middleNode(head *ListNode) *ListNode {
+	left, right := head, head
+
+	for right != nil && right.Next != nil {
+		left = left.Next
+		right = right.Next.Next
+	}
+	return left
+}
+
+// 141. 环形链表
+func hasCycle(head *ListNode) bool {
+	left, right := head, head
+
+	for right != nil && right.Next != nil {
+		left = left.Next
+		right = right.Next.Next
+
+		if left == right {
+			return true
+		}
+	}
+	return false
+}
+
+// 剑指 Offer II 022. 链表中环的入口节点
+func detectCycle(head *ListNode) *ListNode {
+	left, right := head, head
+
+	// 通过快慢指针寻找到环的入口
+	for right != nil && right.Next != nil {
+		left = left.Next
+		right = right.Next.Next
+
+		if left == right {
+			break
+		}
+	}
+	if right == nil || right.Next == nil {
+		return nil
+	}
+	left = head
+
+	for left != right {
+		left = left.Next
+		right = right.Next
+	}
+	return left
+}
+
+// 160. 相交链表
+func getIntersectionNode(headA, headB *ListNode) *ListNode {
+	data := map[*ListNode]struct{}{}
+	left := headA
+	for left != nil {
+		data[left] = struct{}{}
+		left = left.Next
+	}
+
+	right := headB
+	for right != nil {
+		if _, ok := data[right]; ok {
+			return right
+		}
+		right = right.Next
+	}
+
+	return nil
+}
+
+// 160. 相交链表
+func getIntersectionNodeV2(headA, headB *ListNode) *ListNode {
+	p1, p2 := headA, headB
+	for p1 != p2 {
+		if p1 == nil {
+			p1 = headB
+		} else {
+			p1 = p1.Next
+		}
+
+		if p2 == nil {
+			p2 = headA
+		} else {
+			p2 = p2.Next
+		}
+	}
+	return p1
+}
+
+// 26. 删除有序数组中的重复项
+func removeDuplicates(nums []int) int {
+	if len(nums) == 0 {
+		return 0
+	}
+	slow, fast := 0, 0
+	for fast < len(nums) {
+		if nums[slow] != nums[fast] {
+			slow++
+			nums[slow] = nums[fast]
+		}
+		fast++
+	}
+	return slow + 1
+}
+
+// 83. 删除排序链表中的重复元素
+func deleteDuplicates(head *ListNode) *ListNode {
+	if head == nil {
+		return nil
+	}
+	slow, fast := head, head
+	for fast != nil {
+		if slow.Val != fast.Val {
+			slow.Next = fast
+			slow = slow.Next
+		}
+		fast = fast.Next
+	}
+	slow.Next = nil
+	return head
+}
+
+// 27. 移除元素
+func removeElement(nums []int, val int) int {
+	if len(nums) == 0 {
+		return 0
+	}
+	slow, fast := 0, 0
+	for fast < len(nums) {
+		if nums[fast] != val {
+			nums[slow] = nums[fast]
+			slow++
+		}
+		fast++
+	}
+	return slow
+}
+
+// 283. 移动零
+func moveZeroes(nums []int) {
+	if len(nums) == 0 {
+		return
+	}
+	// 寻找所有等于0的数据，进行移除
+	slow, fast := 0, 0
+	for fast < len(nums) {
+		if nums[fast] != 0 {
+			nums[slow] = nums[fast]
+			slow++
+		}
+		fast++
+	}
+
+	// 替换后面非零的数据
+	for ; slow < len(nums); slow++ {
+		nums[slow] = 0
+	}
+}
+
+// 167. 两数之和 II - 输入有序数组
+func twoSumTarget(numbers []int, target int) []int {
+	left, right := 0, len(numbers)-1
+	for left < right {
+		sum := numbers[left] + numbers[right]
+		if sum == target {
+			return []int{left + 1, right + 1}
+		} else if sum < target {
+			left++
+		} else if sum > target {
+			right--
+		}
+	}
+	return []int{-1, -1}
+}
+
+// 344. 反转字符串
+func reverseString(s []byte) {
+	left, right := 0, len(s)-1
+
+	for left < right {
+		s[left], s[right] = s[right], s[left]
+		left++
+		right--
+	}
+}
+
+// 125. 验证回文串
+// 双指针
+func isPalindrome(s string) bool {
+	if len(s) <= 1 {
+		return true
+	}
+	// 判断是否合法的字符
+	isValid := func(v rune) bool {
+		return unicode.IsDigit(v) || unicode.IsLetter(v)
+	}
+
+	s = strings.ToLower(s)
+	str := []rune(s)
+	slow, fast := 0, len(s)-1
+	for slow < fast {
+		// 不是字符串
+		if !isValid(str[slow]) {
+			slow++
+			continue
+		}
+
+		// 验证是否字符串
+		if !isValid(str[fast]) {
+			fast--
+			continue
+		}
+
+		if str[slow] != str[fast] {
+			return false
+		}
+		slow++
+		fast--
+	}
+	return true
+}
+
+// 5. 最长回文子串
+// 从中心向两端扩散的双指针技巧
+func longestPalindrome(s string) string {
+	res := ""
+	for i := 0; i < len(s); i++ {
+		s1 := palindrome(s, i, i)
+		s2 := palindrome(s, i, i+1)
+
+		if len(res) < len(s1) {
+			res = s1
+		}
+		if len(res) < len(s2) {
+			res = s2
+		}
+	}
+	return res
+}
+
+func palindrome(s string, l int, r int) string {
+	// 防止索引越界
+	for l >= 0 && r < len(s) && s[l] == s[r] {
+		// 向两边展开
+		l--
+		r++
+	}
+	// 返回以 s[l] 和 s[r] 为中心的最长回文串
+	return s[l+1 : r]
+}
+
+// 19. 删除链表的倒数第 N 个结点
+// 通过双指针找到该节点的位置
+// 然后删除节点
+func removeNthFromEndV(head *ListNode, n int) *ListNode {
+	newNode := &ListNode{0, head}
+	left, right := newNode, head
+
+	index := 0
+	for right != nil {
+		index++
+		if index > n {
+			left = left.Next
+		}
+		right = right.Next
+	}
+
+	left.Next = left.Next.Next
+	return newNode.Next
+}
+
+func getIntersectionNodeV(headA, headB *ListNode) *ListNode {
+	left, right := headA, headB
+	for left != right {
+		if left == nil {
+			left = headB
+		} else {
+			left = left.Next
+		}
+
+		if right == nil {
+			right = headA
+		} else {
+			right = right.Next
+		}
+	}
+	return left
+}
+
+// 动态规划
+// 509. 斐波那契数
+func fib(n int) int {
+	if n == 1 || n == 2 {
+		return 1
+	}
+	return fib(n-1) + fib(n-2)
+}
+
+// 自顶向下【备忘录】
+// 509. 斐波那契数
+func fibV(n int) int {
+	origin := map[int]int{}
+
+	var dp func(data map[int]int, m int) int
+
+	dp = func(data map[int]int, m int) int {
+		if m == 0 || m == 1 {
+			return m
+		}
+
+		if data[m] != 0 {
+			return data[m]
+		}
+		data[m] = dp(data, m-1) + dp(data, m-2)
+		return data[m]
+	}
+	return dp(origin, n)
+}
+
+// 自底向上
+// 509. 斐波那契数
+func fibV2(n int) int {
+	if n == 0 {
+		return 0
+	}
+	dp := make([]int, n+1)
+	dp[0], dp[1] = 0, 1
+	for i := 2; i <= n; i++ {
+		dp[i] = dp[i-1] + dp[i-2]
+	}
+	return dp[n]
+}
+
+// 动态规划
+// 322. 零钱兑换
+// 自顶向下
+func coinChange(coins []int, amount int) int {
+	memo := make([]int, amount+1)
+	// 将备忘录初始化为 -666，代表还未被计算
+	for i := range memo {
+		memo[i] = -666
+	}
+	maxNum := 1 << 20
+	fmt.Println(maxNum)
+
+	var dp func(coins []int, amount int) int
+	dp = func(coins []int, amount int) int {
+		if amount == 0 {
+			return 0
+		}
+		if amount < 0 {
+			return -1
+		}
+
+		if memo[amount] != -666 {
+			return memo[amount]
+		}
+
+		res := maxNum
+		for _, coin := range coins {
+			subProblem := dp(coins, amount-coin)
+			if subProblem == -1 {
+				continue
+			}
+			res = min(res, 1+subProblem)
+		}
+		if res == maxNum {
+			memo[amount] = -1
+		} else {
+			memo[amount] = res
+		}
+		return memo[amount]
+	}
+
+	return dp(coins, amount)
+}
+
+// 动态规划
+// 322. 零钱兑换
+// 自底向上
+func coinChangeV(coins []int, amount int) int {
+	dp := make([]int, amount+1)
+
+	for i := 0; i < len(dp); i++ {
+		dp[i] = amount + 1
+	}
+
+	dp[0] = 0
+	for i := 0; i < len(dp); i++ {
+		for _, coin := range coins {
+			if i-coin < 0 {
+				continue
+			}
+			dp[i] = min(dp[i], dp[i-coin]+1)
+		}
+	}
+	if dp[amount] == amount+1 {
+		return -1
+	}
+	return dp[amount]
+}
+
+// 状态 、 选择
+// 状态 -> 选择 （穷举）
+
+func maxProfit(prices []int) int {
+	var max func(a, b int) int
+	max = func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+	k := 2
+	days := len(prices)
+	data := make([][][]int, days)
+	for i := range data {
+		data[i] = make([][]int, k+1)
+		for j := range data[i] {
+			data[i][j] = make([]int, 2)
+		}
+	}
+
+	for i := 0; i < days; i++ {
+		if i == 0 {
+			data[i][k][0] = 0
+			data[i][k][1] = -prices[i]
+			continue
+		}
+
+		data[i][k][0] = max(data[i-1][k][0], data[i-1][k][1]+prices[i])
+		data[i][k][1] = max(data[i-1][k][1], data[i-1][k-1][0]-prices[i])
+	}
+	return data[days-1][k][0]
+}
+
+// 注意：go 代码由 chatGPT🤖 根据我的 java 代码翻译，旨在帮助不同背景的读者理解算法逻辑。
+// 本代码还未经过力扣测试，仅供参考，如有疑惑，可以参照我写的 java 代码对比查看。
+
+// 原始版本
+func maxProfit_k_2(prices []int) int {
+
+	var max func(a, b int) int
+	max = func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+	max_k := 2 // 最大可交易次数
+	n := len(prices)
+	dp := make([][][]int, n) // i为天数，k为当前第几次交易，0表示不持有股票，1表示持有股票
+	for i := 0; i < n; i++ {
+		dp[i] = make([][]int, max_k+1)
+		for k := 0; k < max_k+1; k++ {
+			dp[i][k] = make([]int, 2)
+		}
+	}
+	for i := 0; i < n; i++ {
+		for k := max_k; k >= 1; k-- {
+			if i-1 == -1 {
+				// 处理 base case
+				dp[i][k][0] = 0
+				dp[i][k][1] = -prices[i]
+				continue
+			}
+			dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1]+prices[i])
+			dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0]-prices[i])
+		}
+	}
+	// 穷举了 n × max_k × 2 个状态，正确。
+	return dp[n-1][max_k][0] //返回最大利润
+}
+
+func maxProfit_v(prices []int) int {
+	var max func(a, b int) int
+	max = func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+	k := 2
+	n := len(prices)
+	dp := make([][][]int, n)
+	for i := range dp {
+		dp[i] = make([][]int, k+1) // 构建 3 维 DP 数组
+		for j := range dp[i] {
+			dp[i][j] = make([]int, 2) // 初始化 DP 数组
+		}
+	}
+
+	for i := 0; i < n; i++ {
+		for j := k; j >= 1; j-- {
+			if i-1 == -1 {
+				// 处理 base case
+				dp[i][j][0] = 0
+				dp[i][j][1] = -prices[i]
+				continue
+			}
+			dp[i][j][0] = max(dp[i-1][j][0], dp[i-1][j][1]+prices[i])
+			dp[i][j][1] = max(dp[i-1][j][1], dp[i-1][j-1][0]-prices[i])
+		}
+	}
+
+	return dp[n-1][k][0]
+}
+
+// 状态
+// 选择 偷、不偷
+
+// 198. 打家劫舍
+func rob(nums []int) int {
+	var max func(a, b int) int
+	max = func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+
+	data := map[int]int{}
+	res := 0
+	var dp func(number []int, start int) int
+	dp = func(number []int, start int) int {
+		if start >= len(number) {
+			return 0
+		}
+
+		if temp, ok := data[start]; ok {
+			return temp
+		}
+		// 不去抢
+		res = max(dp(number, start+1), dp(number, start+2)+number[start])
+		data[start] = res
+		return res
+	}
+	res = dp(nums, 0)
+	return res
+}
+
+// 198. 打家劫舍
+func rob_v1(nums []int) int {
+	var max func(a, b int) int
+	max = func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+
+	length := len(nums)
+	data := make([]int, length+2)
+
+	for i := length - 1; i >= 0; i-- {
+		data[i] = max(data[i+1], data[i+2]+nums[i])
+	}
+	return data[0]
+}
+
+// 213. 打家劫舍 II
+func rob_v2(nums []int) int {
+	if len(nums) == 1 {
+		return nums[0]
+	}
+	var max func(a, b int) int
+	max = func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+	var dp func(number []int) int
+	dp = func(number []int) int {
+		length := len(number)
+		data := make([]int, length+2)
+
+		for i := length - 1; i >= 0; i-- {
+			data[i] = max(data[i+1], data[i+2]+number[i])
+		}
+		return data[0]
+	}
+	temp1 := nums[0 : len(nums)-1]
+	temp2 := nums[1:]
+	fmt.Println(temp1)
+	fmt.Println(temp2)
+	res := max(dp(temp1), dp(temp2))
+	return res
+}
+
+// 337. 打家劫舍 III
+func rob_v3(root *TreeNode) int {
+	var max func(a, b int) int
+	max = func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+	data := make(map[*TreeNode]int, 0)
+	var dp func(node *TreeNode) int
+	dp = func(node *TreeNode) int {
+		if node == nil {
+			return 0
+		}
+
+		if temp, ok := data[node]; ok {
+			return temp
+		}
+
+		// 不抢
+		notDo := dp(node.Left) + dp(node.Right)
+
+		// 抢
+		doIt := node.Val
+		if node.Left != nil {
+			doIt += dp(node.Left.Left) + dp(node.Left.Right)
+		}
+
+		if node.Right != nil {
+			doIt += dp(node.Right.Left) + dp(node.Right.Right)
+		}
+
+		res := max(notDo, doIt)
+		data[node] = res
+		return res
+	}
+
+	res := dp(root)
+	return res
+}
+
+// 303. 区域和检索 - 数组不可变
+type NumArray struct {
+	Number []int
+}
+
+func Constructor(nums []int) NumArray {
+	temp := make([]int, len(nums)+1)
+	for i := 1; i <= len(nums); i++ {
+		temp[i] = temp[i-1] + nums[i-1]
+	}
+
+	return NumArray{temp}
+}
+
+func (this *NumArray) SumRange(left int, right int) int {
+	return this.Number[right+1] - this.Number[left]
+}
+
+// 304. 二维区域和检索 - 矩阵不可变
+type NumMatrix struct {
+	Number [][]int
+}
+
+func ConstructorA(matrix [][]int) NumMatrix {
+	m, n := len(matrix), len(matrix[0])
+	if m == 0 || n == 0 {
+		return NumMatrix{}
+	}
+	number := make([][]int, m+1)
+	for i := 0; i <= m; i++ {
+		number[i] = make([]int, n+1)
+	}
+
+	for i := 1; i <= m; i++ {
+		for j := 1; j <= n; j++ {
+			number[i][j] = number[i-1][j] + number[i][j-1] + matrix[i-1][j-1] - number[i-1][j-1]
+		}
+	}
+	return NumMatrix{number}
+}
+
+func (this *NumMatrix) SumRegion(row1 int, col1 int, row2 int, col2 int) int {
+	return this.Number[row2+1][col2+1] - this.Number[row1][col2+1] - this.Number[row2+1][col1] + this.Number[row1][col1]
 }

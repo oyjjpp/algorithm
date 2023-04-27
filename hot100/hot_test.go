@@ -296,3 +296,9 @@ func TestIsPalindromeList(t *testing.T) {
 	rs := isPalindromeList(data)
 	t.Log(rs)
 }
+
+func TestMaxPalindromeX(t *testing.T) {
+	s := "babad"
+	rs := maxPalindromeX(s)
+	t.Log(rs)
+}
