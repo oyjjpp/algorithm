@@ -2,8 +2,10 @@ package hot100
 
 import (
 	"container/heap"
+	"crypto/rand"
 	"fmt"
 	"log"
+	"math/big"
 	"sort"
 	"strings"
 	"unicode"
@@ -2074,4 +2076,481 @@ func ConstructorA(matrix [][]int) NumMatrix {
 
 func (this *NumMatrix) SumRegion(row1 int, col1 int, row2 int, col2 int) int {
 	return this.Number[row2+1][col2+1] - this.Number[row1][col2+1] - this.Number[row2+1][col1] + this.Number[row1][col1]
+}
+
+// superEggDrop
+// 887. 鸡蛋掉落
+func superEggDrop(K int, N int) int {
+	min := func(a, b int) int {
+		if a < b {
+			return a
+		}
+		return b
+	}
+	// 备忘录解决重叠子问题
+	meno := map[string]int{}
+
+	var dp func(K, N int) int
+	dp = func(K, N int) int {
+		// base case
+		// 楼层为0
+		if N == 0 {
+			return 0
+		}
+		// 只有一个鸡蛋
+		if K == 1 {
+			return N
+		}
+
+		// 校验备忘录中是否存在
+		key := fmt.Sprintf("%d%d", K, N)
+		if rs, ok := meno[key]; ok {
+			return rs
+		}
+
+		res := 1<<31 - 1
+		left, right := 1, N
+		for left <= right {
+			mid := (left + right) / 2
+
+			// 状态
+			// 碎了
+			broken := dp(K-1, mid-1)
+			// 没碎
+			notBroken := dp(K, N-mid)
+
+			// 选择
+
+			if broken > notBroken {
+				right = mid - 1
+				res = min(res, broken+1)
+			} else {
+				left = mid + 1
+				res = min(res, notBroken+1)
+			}
+		}
+		meno[key] = res
+		return res
+	}
+	return dp(K, N)
+}
+
+func TestFunc() {
+	// 0,1,2,3,4
+	// 8,5,9,6,1
+	// 1,2,3,4,5
+	nums := []int{8, 5, 9, 6, 1}
+
+	diff := make([]int, len(nums))
+	// 构造差分数组
+	diff[0] = nums[0]
+	for i := 1; i < len(nums); i++ {
+		diff[i] = nums[i] - nums[i-1]
+	}
+
+	res := make([]int, len(diff))
+	// 根据差分数组构造结果数组
+	res[0] = diff[0]
+	for i := 1; i < len(diff); i++ {
+		res[i] = res[i-1] + diff[i]
+	}
+}
+
+// 差分分组
+type Difference struct {
+	diff []int
+}
+
+// 输入一个数组，初始化其差分分组
+func NewDifference(nums []int) *Difference {
+	diff := make([]int, len(nums))
+	diff[0] = nums[0]
+	for i := 1; i < len(nums); i++ {
+		diff[i] = nums[i] - nums[i-1]
+	}
+	return &Difference{diff: diff}
+}
+
+// 返回原数组
+func (d *Difference) Result() []int {
+	res := make([]int, len(d.diff))
+	res[0] = d.diff[0]
+	for i := 1; i < len(d.diff); i++ {
+		res[i] = d.diff[i] + res[i-1]
+	}
+	return res
+}
+
+// 给闭区间 [i, j] 增加 val（可以是负数）
+func (d *Difference) Increment(i, j, val int) {
+	d.diff[i] += val
+	if j+1 < len(d.diff) {
+		d.diff[j+1] -= val
+	}
+}
+
+// 370 题「 区间加法」 就
+func getModifiedArray(length int, updates [][]int) []int {
+	// nums 初始化为全 0
+	nums := make([]int, length)
+	// 构造差分解法
+	df := NewDifference(nums)
+
+	for _, update := range updates {
+		i, j, val := update[0], update[1], update[2]
+		df.Increment(i, j, val)
+	}
+
+	return df.Result()
+}
+
+// 1109. 航班预订统计
+func corpFlightBookings(bookings [][]int, n int) []int {
+	// nums 初始化为全 0
+	nums := make([]int, n)
+	// 构造差分解法
+	df := NewDifference(nums)
+
+	for _, booking := range bookings {
+		// 注意转成数组索引要减一哦
+		i := booking[0] - 1
+		j := booking[1] - 1
+		val := booking[2]
+		// 对区间 nums[i..j] 增加 val
+		df.Increment(i, j, val)
+	}
+	// 返回最终的结果数组
+	return df.Result()
+}
+
+// 1094. 拼车
+func carPooling(trips [][]int, capacity int) bool {
+	// 最多有 1001 个车站
+	nums := make([]int, 1001)
+	// 构造差分解法
+	df := NewDifference(nums)
+
+	for _, trip := range trips {
+		// 乘客数量
+		val := trip[0]
+		// 第 trip[1] 站乘客上车
+		i := trip[1]
+		// 第 trip[2] 站乘客已经下车，
+		// 即乘客在车上的区间是 [trip[1], trip[2] - 1]
+		j := trip[2] - 1
+		// 进行区间操作
+		df.Increment(i, j, val)
+	}
+
+	res := df.Result()
+
+	// 客车自始至终都不应该超载
+	for i := 0; i < len(res); i++ {
+		if capacity < res[i] {
+			return false
+		}
+	}
+	return true
+}
+
+// 48. 旋转图像
+func rotate(matrix [][]int) {
+	length := len(matrix)
+
+	// 先沿着对角线镜像对称二维数组
+	for i := 0; i < length; i++ {
+		for j := i; j < length; j++ {
+			matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+		}
+	}
+
+	reverse := func(data []int) {
+		left, right := 0, len(data)-1
+
+		for left < right {
+			data[left], data[right] = data[right], data[left]
+			left++
+			right--
+		}
+	}
+
+	for _, node := range matrix {
+		reverse(node)
+	}
+}
+
+// 54. 螺旋矩阵
+func spiralOrder(matrix [][]int) []int {
+	m, n := len(matrix), len(matrix[0])
+	upper_bound, lower_bound := 0, m-1
+
+	left_bound, right_bound := 0, n-1
+	res := make([]int, 0, m*n)
+	// len(res) == m * n 则遍历完整个数组
+	for len(res) < m*n {
+		if upper_bound <= lower_bound {
+			// 在顶部从左向右遍历
+			for j := left_bound; j <= right_bound; j++ {
+				res = append(res, matrix[upper_bound][j])
+			}
+			// 上边界下移
+			upper_bound++
+		}
+
+		if left_bound <= right_bound {
+			// 在右侧从上向下遍历
+			for i := upper_bound; i <= lower_bound; i++ {
+				res = append(res, matrix[i][right_bound])
+			}
+			// 右边界左移
+			right_bound--
+		}
+
+		if upper_bound <= lower_bound {
+			// 在底部从右向左遍历
+			for j := right_bound; j >= left_bound; j-- {
+				res = append(res, matrix[lower_bound][j])
+			}
+			// 下边界上移
+			lower_bound--
+		}
+
+		if left_bound <= right_bound {
+			// 在左侧从下向上遍历
+			for i := lower_bound; i >= upper_bound; i-- {
+				res = append(res, matrix[i][left_bound])
+			}
+			// 左边界右移
+			left_bound++
+		}
+	}
+	return res
+}
+
+// 59. 螺旋矩阵 II
+func generateMatrix(n int) [][]int {
+	matrix := make([][]int, n)
+	for i := range matrix {
+		matrix[i] = make([]int, n)
+	}
+
+	upper_bound, lower_bound := 0, n-1
+	left_bound, right_bound := 0, n-1
+	// 需要填入矩阵的数字
+	num := 1
+
+	for num <= n*n {
+		if upper_bound <= lower_bound {
+			// 在顶部从左向右遍历
+			for j := left_bound; j <= right_bound; j++ {
+				matrix[upper_bound][j] = num
+				num++
+			}
+			// 上边界下移
+			upper_bound++
+		}
+
+		if left_bound <= right_bound {
+			// 在右侧从上向下遍历
+			for i := upper_bound; i <= lower_bound; i++ {
+				matrix[i][right_bound] = num
+				num++
+			}
+			// 右边界左移
+			right_bound--
+		}
+
+		if upper_bound <= lower_bound {
+			// 在底部从右向左遍历
+			for j := right_bound; j >= left_bound; j-- {
+				matrix[lower_bound][j] = num
+				num++
+			}
+			// 下边界上移
+			lower_bound--
+		}
+
+		if left_bound <= right_bound {
+			// 在左侧从下向上遍历
+			for i := lower_bound; i >= upper_bound; i-- {
+				matrix[i][left_bound] = num
+				num++
+			}
+			// 左边界右移
+			left_bound++
+		}
+	}
+	return matrix
+}
+
+// 187. 重复的DNA序列
+func findRepeatedDnaSequences(s string) []string {
+	length := len(s)
+	res := make(map[string]bool, 0)
+	scan := make(map[string]bool, 0)
+
+	for i := 0; i+10 <= length; i++ {
+		subStr := s[i : i+10]
+
+		if _, ok := scan[subStr]; ok {
+			res[subStr] = true
+		} else {
+			scan[subStr] = true
+		}
+	}
+
+	data := make([]string, 0)
+	for key := range res {
+		data = append(data, key)
+	}
+	return data
+}
+
+// 剑指 Offer 53 - I. 在排序数组中查找数字 I
+func searchOffer53(nums []int, target int) int {
+	left, right := 0, len(nums)-1
+
+	for left <= right {
+		mid := left + (right-left)/2
+		log.Println("for", left, mid, right)
+		if target == nums[mid] {
+			right = mid - 1
+		} else if target > nums[mid] {
+			left = mid + 1
+		} else if target < nums[mid] {
+			right = mid - 1
+		}
+	}
+
+	log.Println(left)
+	if left == len(nums) {
+		return 0
+	}
+
+	if nums[left] != target {
+		return 0
+	}
+
+	number := 0
+
+	for ; left < len(nums); left++ {
+		if nums[left] == target {
+			number++
+		} else {
+			break
+		}
+	}
+	return number
+}
+
+// 528. 按权重随机选择
+type Solution struct {
+	preSum []int
+}
+
+func ConstructorSolution(w []int) *Solution {
+	preSum := make([]int, len(w)+1)
+
+	preSum[0] = 0
+	for i := 1; i <= len(w); i++ {
+		preSum[i] = w[i-1] + preSum[i-1]
+	}
+	log.Println(preSum)
+	return &Solution{preSum}
+}
+
+func (this *Solution) PickIndex() int {
+	n := len(this.preSum)
+
+	result, _ := rand.Int(rand.Reader, big.NewInt(int64(this.preSum[n-1])))
+	index := result.Int64() + 1
+	log.Println(n, this.preSum, index)
+	return this.sesrch(int(index)) - 1
+}
+
+func (this *Solution) sesrch(target int) int {
+	if len(this.preSum) == 0 {
+		return -1
+	}
+	// [0,1,2]
+	// [0,1,4]
+	left, right := 0, len(this.preSum)
+	for left < right {
+		mid := left + (right-left)/2
+		if this.preSum[mid] == target {
+			right = mid
+		} else if this.preSum[mid] < target {
+			left = mid + 1
+		} else if this.preSum[mid] > target {
+			right = mid
+		}
+	}
+	return left
+}
+
+// 870. 优势洗牌
+func advantageCount(nums1 []int, nums2 []int) []int {
+	n := len(nums1)
+	idx1 := make([]int, n)
+	idx2 := make([]int, n)
+	for i := 1; i < n; i++ {
+		idx1[i] = i
+		idx2[i] = i
+	}
+
+	// 根据元素对索引位置进行大小排序
+	sort.Slice(idx1, func(i, j int) bool {
+		return nums1[idx1[i]] < nums1[idx1[j]]
+	})
+	sort.Slice(idx2, func(i, j int) bool {
+		return nums2[idx2[i]] < nums2[idx2[j]]
+	})
+
+	log.Println(idx1, idx2)
+	log.Println(nums1, nums2)
+
+	// 保存结果
+	ans := make([]int, n)
+	left, right := 0, n-1
+
+	for i := 0; i < n; i++ {
+		if nums1[idx1[i]] > nums2[idx2[left]] {
+			ans[idx2[left]] = nums1[idx1[i]]
+			left++
+		} else {
+			ans[idx2[right]] = nums1[idx1[i]]
+			right--
+		}
+	}
+	return ans
+}
+
+// 870. 优势洗牌
+func advantageCountX(nums1 []int, nums2 []int) []int {
+	return nil
+}
+
+type PriorityArray [][]int
+
+func (pq PriorityArray) Len() int {
+	return len(pq)
+}
+
+func (pq PriorityArray) Less(i, j int) bool {
+	return pq[i][1] > pq[j][1]
+}
+
+func (pq PriorityArray) Swap(i, j int) {
+	pq[i], pq[j] = pq[j], pq[i]
+}
+
+func (pq *PriorityArray) Push(x interface{}) {
+	*pq = append(*pq, x.([]int))
+}
+
+func (pq *PriorityArray) Pop() interface{} {
+	n := len(*pq)
+	item := (*pq)[n-1]
+	*pq = (*pq)[:n-1]
+	return item
 }

@@ -1,6 +1,7 @@
 package hot100
 
 import (
+	"sort"
 	"testing"
 )
 
@@ -297,8 +298,46 @@ func TestIsPalindromeList(t *testing.T) {
 	t.Log(rs)
 }
 
-func TestMaxPalindromeX(t *testing.T) {
-	s := "babad"
-	rs := maxPalindromeX(s)
-	t.Log(rs)
+func TestSearchOffer53(t *testing.T) {
+	// nums1 := []int{2, 7, 11, 15}
+	// nums2 := []int{1, 10, 4, 11}
+
+	nums1 := []int{12, 24, 8, 32}
+	nums2 := []int{13, 25, 32, 11}
+
+	data := advantageCountC(nums1, nums2)
+	t.Log(data)
+}
+func advantageCountC(nums1 []int, nums2 []int) []int {
+	n := len(nums1)
+
+	key1 := make([]int, n)
+	key2 := make([]int, n)
+
+	for i := 1; i < n; i++ {
+		key1[i] = i
+		key2[i] = i
+	}
+
+	sort.Slice(key1, func(i, j int) bool {
+		return nums1[key1[i]] < nums1[key1[j]]
+	})
+
+	sort.Slice(key2, func(i, j int) bool {
+		return nums2[key2[i]] < nums2[key2[j]]
+	})
+
+	res := make([]int, n)
+	left, right := 0, n-1
+
+	for i := 0; i < n; i++ {
+		if nums1[key1[i]] > nums2[key2[left]] {
+			res[key2[left]] = nums1[key1[i]]
+			left++
+		} else {
+			res[key2[right]] = nums1[key1[i]]
+			right--
+		}
+	}
+	return res
 }
