@@ -341,3 +341,21 @@ func advantageCountC(nums1 []int, nums2 []int) []int {
 	}
 	return res
 }
+
+func TestScanTreeCount(t *testing.T) {
+	data := &TreeNode{
+		Val: 1,
+		Left: &TreeNode{
+			Val: 2,
+			Left: &TreeNode{
+				Val: 21,
+			},
+			Right: &TreeNode{
+				Val: 22,
+			},
+		},
+		Right: &TreeNode{Val: 3},
+	}
+	rs := ScanTreeCount(data)
+	t.Log(rs)
+}

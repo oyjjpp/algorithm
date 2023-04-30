@@ -2554,3 +2554,309 @@ func (pq *PriorityArray) Pop() interface{} {
 	*pq = (*pq)[:n-1]
 	return item
 }
+
+// bubblingSort
+// 冒泡排序
+func bubblingSort(data []int) {
+	length := len(data)
+	if length < 2 {
+		return
+	}
+
+	// 外层循环，告知排序得次数
+	for i := 0; i < length-1; i++ {
+		// 内层循环，用户循环比较，每一步骤都将最大得移动到最右侧
+		for j := 0; j < length-i-1; j++ {
+			log.Println(j)
+			// 是否会溢出？
+			if data[j] > data[j+1] {
+				data[j], data[j+1] = data[j+1], data[j]
+			}
+		}
+	}
+}
+
+// selectSort
+// 选择排序
+func selectSort(data []int) {
+	length := len(data)
+	if length < 2 {
+		return
+	}
+	for i := 0; i < length-1; i++ {
+		// 假定最大值索引位置为第一个
+		maxpos := 0
+
+		// 内部循环找到真实得最大值索引位置
+		for j := 0; j < length-i; j++ {
+			if data[j] > data[maxpos] {
+				maxpos = j
+			}
+		}
+		data[length-i-1], data[maxpos] = data[maxpos], data[length-i-1]
+	}
+}
+
+// insertSort
+// 插入排序
+func insertSort(data []int) {
+	length := len(data)
+	if length < 2 {
+		return
+	}
+
+	// 假设第一个元素为有序数组
+	for i := 1; i < length; i++ {
+		// 选取一个值 向有序集合中插入
+		temp := data[i]
+
+		// 将选取的值插入到有序集合的指定位置
+		j := i - 1
+		// 挑选的值与倒序与有序集合对比，如果选择的值小于则移动有序集合索引
+		for ; j >= 0 && data[j] > temp; j-- {
+			data[j+1] = data[j]
+		}
+		data[j+1] = temp
+	}
+}
+
+/**
+ * @desc 归并排序
+ * 思路： 选择中间索引将数组分割为两个，然后组合两个数组按大小顺序组合
+ * 时间复杂度 O(nlog2n)
+ * 空间复杂度 O(n) + O(log2n)
+ * 稳定性：稳定
+ */
+func MergeSort(item []int) []int {
+	mergeSort(item, 0, len(item)-1)
+	return item
+}
+
+// @param item 排序数组
+// @param 开始索引位置
+// @param 结束索引位置
+func mergeSort(item []int, left, right int) {
+	if left < right {
+		center := (left + right) / 2
+		mergeSort(item, left, center)
+		mergeSort(item, center+1, right)
+		merge(item, left, center+1, right)
+	}
+}
+
+// @desc 合并两个数组
+func merge(item []int, left, center, right int) {
+	// 左侧数组大小
+	leftData := make([]int, center-left)
+	// 右侧数组大小
+	rightData := make([]int, right-center+1)
+
+	// 向两个数组中填充数据
+	for i := left; i < center; i++ {
+		leftData[i-left] = item[i]
+	}
+
+	for i := center; i <= right; i++ {
+		rightData[i-center] = item[i]
+	}
+
+	// 用于遍历两个数组
+	i, j := 0, 0
+	// 数组中的第一个元素
+	index := left
+	// 循环对比合并两个数组
+	for i < len(leftData) && j < len(rightData) {
+		if leftData[i] < rightData[j] {
+			item[index] = leftData[i]
+			i++
+		} else {
+			item[index] = rightData[j]
+			j++
+		}
+		// 增加后索引增加1
+		index++
+	}
+
+	// 将数据中剩余的元素继续插入
+	for i < len(leftData) {
+		item[index] = leftData[i]
+		i++
+		index++
+	}
+	for j < len(rightData) {
+		item[index] = rightData[j]
+		j++
+		index++
+	}
+}
+
+func mergeSortV2(item []int, left, center, right int) {
+	temp := make([]int, right-left+1)
+	i := 0
+	// 左边开始
+	start := left
+	// 右边开始
+	end := center + 1
+	for start <= center && end <= right {
+		if item[start] < item[end] {
+			temp[i] = item[start]
+			start++
+		} else {
+			temp[i] = item[end]
+			end++
+		}
+		i++
+	}
+
+	for start <= center {
+		temp[i] = item[start]
+		i++
+		start++
+	}
+	for end <= end {
+		temp[i] = item[end]
+		i++
+		end++
+	}
+	// 将结果返回给原素组
+	for i := 0; i < len(temp); i++ {
+		item[left+i] = temp[i]
+	}
+}
+
+// quickSort
+// 快速排序，使用递归方式
+func quickSort(data []int) []int {
+	if len(data) == 0 {
+		return data
+	}
+	// 取第一个元素作为比较节点
+	// temp := data[0]
+	left := []int{}
+	right := []int{}
+
+	// 此处循环从1开始，第一个节点已经拿出来用于比较了
+	for i := 1; i < len(data); i++ {
+		if data[i] > data[0] {
+			right = append(right, data[i])
+		} else {
+			left = append(left, data[i])
+		}
+	}
+	left = quickSort(left)
+	right = quickSort(right)
+	return append(append(left, data[0]), right...)
+}
+
+// quickSort
+// 快速排序，使用递归方式
+func quickSortX(data []int, left, right int) {
+	if left >= right {
+		return
+	}
+
+	start := left
+	end := right
+
+	// 选择第一个节点
+	value := data[left]
+	// 根据选取的节点将数组 分成两部分
+	for left < right {
+		// 如果右侧节点大于选取节点则向左移动指针
+		for right > left && data[right] >= value {
+			right--
+		}
+		data[left] = data[right]
+
+		// 如果左边节点小于选取节点则向右移动指针
+		for left < right && data[left] <= value {
+			left++
+		}
+		data[right] = data[left]
+	}
+	// 将选取得值赋值左指针
+	data[left] = value
+	quickSortX(data, start, left-1)
+	quickSortX(data, left+1, end)
+}
+
+// 扫描二叉树节点数
+func ScanTreeCount(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	leftCount := ScanTreeCount(root.Left)
+	rightCount := ScanTreeCount(root.Right)
+	// 后序位置
+	fmt.Printf("节点 %v 的左子树有 %d 个节点，右子树有 %d 个节点 \n",
+		root, leftCount, rightCount)
+
+	return leftCount + rightCount + 1
+}
+
+// 226. 翻转二叉树
+func invertTree(root *TreeNode) *TreeNode {
+	var traverse func(root *TreeNode)
+	traverse = func(root *TreeNode) {
+		if root == nil {
+			return
+		}
+		temp := root.Left
+		root.Left = root.Right
+		root.Right = temp
+
+		traverse(root.Left)
+		traverse(root.Right)
+	}
+	traverse(root)
+	return root
+}
+
+// 116. 填充每个节点的下一个右侧节点指针
+func connect(root *Node) *Node {
+	var traverse func(left, right *Node)
+	traverse = func(left, right *Node) {
+		if left == nil || right == nil {
+			return
+		}
+
+		left.Next = right
+		traverse(left.Left, left.Right)
+		traverse(right.Left, right.Right)
+		traverse(left.Right, right.Left)
+	}
+	if root == nil {
+		return root
+	}
+
+	traverse(root.Left, root.Right)
+	return root
+}
+
+// 114. 二叉树展开为链表
+func flatten(root *TreeNode) {
+	// base case
+	if root == nil {
+		return
+	}
+
+	// 利用定义，把左右子树拉平
+	flatten(root.Left)
+	flatten(root.Right)
+
+	/**** 后序遍历位置 ****/
+	// 1、左右子树已经被拉平成一条链表
+	left := root.Left
+	right := root.Right
+
+	// 2、将左子树作为右子树
+	root.Left = nil
+	root.Right = left
+
+	// 3、将原先的右子树接到当前右子树的末端
+	p := root
+	for p.Right != nil {
+		p = p.Right
+	}
+	p.Right = right
+}
