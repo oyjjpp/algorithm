@@ -1,6 +1,7 @@
 package hot100
 
 import (
+	"encoding/json"
 	"sort"
 	"testing"
 )
@@ -347,15 +348,28 @@ func TestScanTreeCount(t *testing.T) {
 		Val: 1,
 		Left: &TreeNode{
 			Val: 2,
+		},
+		Right: &TreeNode{
+			Val: 3,
 			Left: &TreeNode{
-				Val: 21,
+				Val: 4,
 			},
 			Right: &TreeNode{
-				Val: 22,
+				Val: 5,
 			},
 		},
-		Right: &TreeNode{Val: 3},
 	}
-	rs := ScanTreeCount(data)
+	obj := CodecInit()
+	rs := obj.serialize(data)
 	t.Log(rs)
+}
+
+func TestBuildTreeX(t *testing.T) {
+	inorder := []int{9, 3, 15, 20, 7}
+	postorder := []int{9, 15, 7, 20, 3}
+
+	rs := buildTreeX(inorder, postorder)
+
+	str, err := json.Marshal(rs)
+	t.Log(err, string(str))
 }

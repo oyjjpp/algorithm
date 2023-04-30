@@ -7,6 +7,7 @@ import (
 	"log"
 	"math/big"
 	"sort"
+	"strconv"
 	"strings"
 	"unicode"
 )
@@ -373,6 +374,34 @@ func buildTree(preorder []int, inorder []int) *TreeNode {
 	// 参数为右子数的前序遍历，中序遍历
 	root.Right = buildTree(preorder[index:], inorder[i+1:])
 	return root
+}
+
+// 106. 从中序与后序遍历序列构造二叉树
+func buildTreeX(inorder []int, postorder []int) *TreeNode {
+	idxMap := map[int]int{}
+	for i, v := range inorder {
+		idxMap[v] = i
+	}
+	var build func(int, int) *TreeNode
+	build = func(inorderLeft, inorderRight int) *TreeNode {
+		// 无剩余节点
+		if inorderLeft > inorderRight {
+			return nil
+		}
+
+		// 后序遍历的末尾元素即为当前子树的根节点
+		val := postorder[len(postorder)-1]
+		postorder = postorder[:len(postorder)-1]
+		root := &TreeNode{Val: val}
+
+		// 根据 val 在中序遍历的位置，将中序遍历划分成左右两颗子树
+		// 由于我们每次都从后序遍历的末尾取元素，所以要先遍历右子树再遍历左子树
+		inorderRootIndex := idxMap[val]
+		root.Right = build(inorderRootIndex+1, inorderRight)
+		root.Left = build(inorderLeft, inorderRootIndex-1)
+		return root
+	}
+	return build(0, len(inorder)-1)
 }
 
 // 124. 二叉树中的最大路径和
@@ -2860,3 +2889,70 @@ func flatten(root *TreeNode) {
 	}
 	p.Right = right
 }
+
+// 654. 最大二叉树
+func constructMaximumBinaryTree(nums []int) *TreeNode {
+	if len(nums) == 0 {
+		return nil
+	}
+
+	maxValue, index := -1<<10, 0
+
+	for i := 0; i < len(nums); i++ {
+		if maxValue < nums[i] {
+			maxValue = nums[i]
+			index = i
+		}
+	}
+
+	root := &TreeNode{
+		Val: maxValue,
+	}
+	root.Left = constructMaximumBinaryTree(nums[:index])
+	root.Right = constructMaximumBinaryTree(nums[index+1:])
+	return root
+}
+
+// 297. 二叉树的序列化与反序列化
+type Codec struct{}
+
+func CodecInit() (_ Codec) {
+	return
+}
+
+func (Codec) serialize(root *TreeNode) string {
+	sb := &strings.Builder{}
+	var dfs func(*TreeNode)
+	dfs = func(node *TreeNode) {
+		// 前序遍历 将数据存储到builder中
+		if node == nil {
+			sb.WriteString("null,")
+			return
+		}
+		sb.WriteString(strconv.Itoa(node.Val))
+		sb.WriteByte(',')
+
+		dfs(node.Left)
+		dfs(node.Right)
+	}
+	dfs(root)
+	return sb.String()
+}
+
+func (Codec) deserialize(data string) *TreeNode {
+	sp := strings.Split(data, ",")
+	var build func() *TreeNode
+	build = func() *TreeNode {
+		if sp[0] == "null" {
+			sp = sp[1:]
+			return nil
+		}
+		val, _ := strconv.Atoi(sp[0])
+		sp = sp[1:]
+		return &TreeNode{val, build(), build()}
+	}
+	return build()
+}
+
+// 652. 寻找重复的子树
+func findDuplicateSubtrees(root *TreeNode) []*TreeNode {}
