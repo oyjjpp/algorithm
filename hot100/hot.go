@@ -2955,4 +2955,204 @@ func (Codec) deserialize(data string) *TreeNode {
 }
 
 // 652. 寻找重复的子树
-func findDuplicateSubtrees(root *TreeNode) []*TreeNode {}
+func findDuplicateSubtrees(root *TreeNode) []*TreeNode {
+	memo := make(map[string]int, 0)
+	res := make([]*TreeNode, 0)
+
+	var dp func(root *TreeNode) string
+	dp = func(root *TreeNode) string {
+		if root == nil {
+			return "null"
+		}
+
+		left := dp(root.Left)
+		right := dp(root.Right)
+
+		subTree := fmt.Sprintf("%s,%s,%d", left, right, root.Val)
+
+		if temp, ok := memo[subTree]; ok && temp == 1 {
+			res = append(res, root)
+		}
+		memo[subTree]++
+		return subTree
+	}
+	dp(root)
+	return res
+}
+
+// 归并排序
+func MergeSortX(nums []int) {
+	temp := make([]int, len(nums))
+
+	// 合并
+	var merge func(nums []int, start, mid, end int)
+	merge = func(nums []int, start, mid, end int) {
+		// temp := make([]int, len(nums))
+		for i := start; i <= end; i++ {
+			temp[i] = nums[i]
+		}
+
+		// 合并
+		i, j := start, mid+1
+		for p := start; p <= end; p++ {
+			if i == mid+1 {
+				// 左侧 已经完成
+				nums[p] = temp[j]
+				j++
+			} else if j == (end + 1) {
+				// 右侧 已经完成
+				nums[p] = temp[i]
+				i++
+			} else if temp[i] > temp[j] {
+				nums[p] = temp[j]
+				j++
+			} else {
+				nums[p] = temp[i]
+				i++
+			}
+
+		}
+
+		log.Println(start, nums)
+	}
+
+	// 排序
+	var sort func(nums []int, start, end int)
+	sort = func(nums []int, start, end int) {
+		log.Println(start, end)
+		// 单个元素不需要排序
+		if start == end {
+			return
+		}
+
+		mid := start + (end-start)/2
+		// 先对左半部分数组 nums[start..mid] 排序
+		sort(nums, start, mid)
+		// 再对右半部分数组 nums[mid+1..end] 排序
+		sort(nums, mid+1, end)
+		// 将两部分有序数组合并成一个有序数组
+		merge(nums, start, mid, end)
+	}
+
+	sort(nums, 0, len(nums)-1)
+}
+
+// 315. 计算右侧小于当前元素的个数
+func countSmaller(nums []int) []int {
+	return new(PairSolution).countSmaller(nums)
+}
+
+type Pair struct {
+	val int
+	id  int
+}
+
+type PairSolution struct {
+	temp  []Pair
+	count []int
+}
+
+func (s *PairSolution) countSmaller(nums []int) []int {
+	n := len(nums)
+	s.count = make([]int, n)
+	s.temp = make([]Pair, n)
+	arr := make([]Pair, n)
+
+	for i := 0; i < n; i++ {
+		arr[i] = Pair{val: nums[i], id: i}
+	}
+
+	s.sort(arr, 0, n-1)
+
+	res := make([]int, n)
+	for i, c := range s.count {
+		res[i] = c
+	}
+	return res
+}
+
+func (s *PairSolution) sort(arr []Pair, lo int, hi int) {
+	if lo == hi {
+		return
+	}
+	mid := lo + (hi-lo)/2
+	s.sort(arr, lo, mid)
+	s.sort(arr, mid+1, hi)
+	s.merge(arr, lo, mid, hi)
+}
+
+func (s *PairSolution) merge(arr []Pair, lo int, mid int, hi int) {
+	for i := lo; i <= hi; i++ {
+		s.temp[i] = arr[i]
+	}
+	i, j := lo, mid+1
+	for p := lo; p <= hi; p++ {
+		if i == mid+1 {
+			arr[p] = s.temp[j]
+			j++
+		} else if j == hi+1 {
+			arr[p] = s.temp[i]
+			s.count[arr[p].id] += j - mid - 1
+			i++
+		} else if s.temp[i].val > s.temp[j].val {
+			arr[p] = s.temp[j]
+			j++
+		} else {
+			arr[p] = s.temp[i]
+			s.count[arr[p].id] += j - mid - 1
+			i++
+		}
+	}
+}
+
+// 493. 翻转对
+func reversePairs(nums []int) int {
+	temp := make([]int, len(nums))
+	count := 0
+
+	// 执行归并排序
+	var sort func([]int, int, int)
+	sort = func(nums []int, lo int, hi int) {
+		if lo == hi {
+			return
+		}
+		mid := lo + (hi-lo)/2
+		sort(nums, lo, mid)
+		sort(nums, mid+1, hi)
+		mergeReversePairs(nums, temp, lo, mid, hi, &count)
+	}
+
+	sort(nums, 0, len(nums)-1)
+	return count
+}
+
+func mergeReversePairs(nums []int, temp []int, lo int, mid int, hi int, count *int) {
+	for i := lo; i <= hi; i++ {
+		temp[i] = nums[i]
+	}
+
+	end := mid + 1
+	for i := lo; i <= mid; i++ {
+		for end <= hi && int64(nums[i]) > int64(nums[end])*2 {
+			end++
+		}
+		*count += end - (mid + 1)
+	}
+
+	i, j := lo, mid+1
+	for p := lo; p <= hi; p++ {
+		if i == mid+1 {
+			nums[p] = temp[j]
+			j++
+		} else if j == hi+1 {
+			nums[p] = temp[i]
+			i++
+		} else if temp[i] > temp[j] {
+			nums[p] = temp[j]
+			j++
+		} else {
+			nums[p] = temp[i]
+			i++
+		}
+	}
+}

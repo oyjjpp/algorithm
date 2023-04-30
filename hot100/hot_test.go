@@ -373,3 +373,10 @@ func TestBuildTreeX(t *testing.T) {
 	str, err := json.Marshal(rs)
 	t.Log(err, string(str))
 }
+
+func TestMergeSortX(t *testing.T) {
+	data := []int{8, 3, 5, 1, 9, 12, 5}
+	t.Log(data)
+	MergeSortX(data)
+	t.Log(data)
+}
