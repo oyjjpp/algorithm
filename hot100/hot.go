@@ -3156,3 +3156,114 @@ func mergeReversePairs(nums []int, temp []int, lo int, mid int, hi int, count *i
 		}
 	}
 }
+
+// 538. 把二叉搜索树转换为累加树
+func convertBST(root *TreeNode) *TreeNode {
+	sum := 0
+	var dp func(root *TreeNode)
+	dp = func(root *TreeNode) {
+		if root == nil {
+			return
+		}
+		dp(root.Right)
+		sum += root.Val
+		root.Val = sum
+		dp(root.Left)
+	}
+	dp(root)
+	return root
+}
+
+// 98. 验证二叉搜索树
+func isValidBST(root *TreeNode) bool {
+	var dp func(root, min, max *TreeNode) bool
+	dp = func(root, min, max *TreeNode) bool {
+		if root == nil {
+			return true
+		}
+
+		if min != nil && root.Val <= min.Val {
+			return false
+		}
+
+		if max != nil && root.Val >= max.Val {
+			return false
+		}
+
+		return dp(root.Left, min, root) && dp(root.Right, root, max)
+	}
+
+	return dp(root, nil, nil)
+}
+
+// 700. 二叉搜索树中的搜索
+func searchBST(root *TreeNode, val int) *TreeNode {
+	if root == nil {
+		return nil
+	}
+
+	if root.Val > val {
+		return searchBST(root.Left, val)
+	}
+
+	if root.Val < val {
+		return searchBST(root.Right, val)
+	}
+	return root
+}
+
+// 在 BST 中插入一个数
+func insertIntoBST(root *TreeNode, val int) *TreeNode {
+	//找到空位置插入新节点
+	if root == nil {
+		return &TreeNode{Val: val}
+	}
+	// if (root.val == val)
+	//     在BST中一般不会插入已存在元素
+	if root.Val < val {
+		root.Right = insertIntoBST(root.Right, val)
+	}
+	if root.Val > val {
+		root.Left = insertIntoBST(root.Left, val)
+	}
+	return root
+}
+
+// 删除二叉搜索树中的一个节点
+func deleteNode(root *TreeNode, key int) *TreeNode {
+	if root == nil {
+		return nil
+	}
+	if root.Val == key {
+		// These two if statements correctly handle cases 1 and 2
+		if root.Left == nil {
+			return root.Right
+		}
+		if root.Right == nil {
+			return root.Left
+		}
+		// Handle case 3
+		// Get the minimum node of the right subtree
+		minNode := getMin(root.Right)
+		// Delete the minimum node of the right subtree
+		root.Right = deleteNode(root.Right, minNode.Val)
+		// Replace the root node with the minimum node of the right subtree
+		minNode.Left = root.Left
+		minNode.Right = root.Right
+		root = minNode
+	} else if root.Val > key {
+		root.Left = deleteNode(root.Left, key)
+	} else if root.Val < key {
+		root.Right = deleteNode(root.Right, key)
+	}
+	return root
+}
+
+// Gets the minimum node of a binary search tree
+func getMin(node *TreeNode) *TreeNode {
+	// The furthest left node of a binary search tree is the minimum node
+	for node.Left != nil {
+		node = node.Left
+	}
+	return node
+}
