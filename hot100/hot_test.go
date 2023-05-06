@@ -380,3 +380,10 @@ func TestMergeSortX(t *testing.T) {
 	MergeSortX(data)
 	t.Log(data)
 }
+
+func TestLongestSubstringX(t *testing.T) {
+	s := "aaabb"
+	k := 2
+	rs := longestSubstringX(s, k)
+	t.Log(rs)
+}

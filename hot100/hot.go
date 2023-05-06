@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"fmt"
 	"log"
+	"math"
 	"math/big"
 	"sort"
 	"strconv"
@@ -3266,4 +3267,135 @@ func getMin(node *TreeNode) *TreeNode {
 		node = node.Left
 	}
 	return node
+}
+
+func longestSubstring(s string, k int) int {
+	counts := make(map[byte]int)
+	left, right, res := 0, 0, 0
+	for right < len(s) {
+		counts[s[right]]++
+		if len(counts) > 26 {
+			counts[s[left]]--
+			if counts[s[left]] == 0 {
+				delete(counts, s[left])
+			}
+			left++
+		} else if minx(counts) >= k {
+			fmt.Println(right, left)
+			res = maxx(res, right-left+1)
+		}
+		right++
+	}
+	return res
+}
+
+func minx(counts map[byte]int) int {
+	minVal := math.MaxInt32
+	for _, v := range counts {
+		if v < minVal {
+			minVal = v
+		}
+	}
+	return minVal
+}
+
+func maxx(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func longestSubstringX(s string, k int) (res int) {
+	for t := 1; t <= 26; t++ {
+		window := [26]int{}
+		total := 0
+		lessK := 0
+		l := 0
+		for r, ch := range s {
+			ch -= 'a'
+			if window[ch] == 0 {
+				total++
+				lessK++
+			}
+			window[ch]++
+			if window[ch] == k {
+				lessK--
+			}
+
+			for total > t {
+				ch := s[l] - 'a'
+				if window[ch] == k {
+					lessK++
+				}
+				window[ch]--
+				if window[ch] == 0 {
+					total--
+					lessK--
+				}
+				l++
+			}
+			if lessK == 0 {
+				res = max(res, r-l+1)
+			}
+		}
+	}
+	return res
+}
+
+func longString(s string, k int) int {
+	res := 0
+	if s == "" {
+		return res
+	}
+
+	window := [26]int{}
+	for _, ch := range s {
+		window[ch-'a']++
+	}
+
+	var data byte
+	for i, c := range window[:] {
+		if 0 < c && c < k {
+			data = 'a' + byte(i)
+			break
+		}
+	}
+	if data == 0 {
+		return len(s)
+	}
+
+	newData := string(data)
+	newS := strings.Split(s, newData)
+	for _, subStr := range newS {
+		res = max(res, longString(subStr, k))
+	}
+	return res
+}
+
+func longestSubstringZ(s string, k int) (ans int) {
+	if s == "" {
+		return
+	}
+
+	cnt := [26]int{}
+	for _, ch := range s {
+		cnt[ch-'a']++
+	}
+
+	var split byte
+	for i, c := range cnt[:] {
+		if 0 < c && c < k {
+			split = 'a' + byte(i)
+			break
+		}
+	}
+	if split == 0 {
+		return len(s)
+	}
+
+	for _, subStr := range strings.Split(s, string(split)) {
+		ans = max(ans, longestSubstringZ(subStr, k))
+	}
+	return
 }
